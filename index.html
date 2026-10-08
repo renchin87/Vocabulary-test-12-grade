@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Үгсийн сангийн тест</title>
+<style>
+:root{--bg:#f6f8fa;--card:#fff;--tx:#1b2430;--mu:#5d6b7a;--ac:#1f7a8c;--bd:#d7dee5;--ok:#1e8e4e;--okb:#e0f5e9;--no:#c0392b;--nob:#fbe5e2;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10161c;--card:#1a232c;--tx:#e8eef3;--mu:#97a6b5;--ac:#4fb3c6;--bd:#2d3a46;--ok:#58d68d;--okb:#17331f;--no:#ec7063;--nob:#3a1d1a}}
+:root[data-theme="dark"]{--bg:#10161c;--card:#1a232c;--tx:#e8eef3;--mu:#97a6b5;--ac:#4fb3c6;--bd:#2d3a46;--ok:#58d68d;--okb:#17331f;--no:#ec7063;--nob:#3a1d1a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45}
+main{max-width:560px;margin:0 auto;padding:16px}
+h1{font-size:1.3rem;margin:4px 0 14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:12px}
+h2{font-size:.95rem;color:var(--mu);margin:0 0 8px;font-weight:600}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.chip,.opt,.go{font:inherit;color:var(--tx);background:var(--card);border:1.5px solid var(--bd);border-radius:10px;padding:10px 12px;cursor:pointer;text-align:left}
+.chip.on{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 14%,transparent);font-weight:600}
+.go{width:100%;background:var(--ac);color:#fff;border-color:var(--ac);text-align:center;font-weight:600;font-size:1rem}
+.q{font-size:1.25rem;font-weight:600;margin:6px 0 4px}
+.hint{color:var(--mu);font-size:.9rem;margin-bottom:12px}
+.opt{display:block;width:100%;margin-bottom:8px}
+.opt.ok{border-color:var(--ok);background:var(--okb)}
+.opt.no{border-color:var(--no);background:var(--nob)}
+.bar{height:6px;background:var(--bd);border-radius:3px;margin-bottom:12px}
+.bar i{display:block;height:100%;background:var(--ac);border-radius:3px}
+.top{display:flex;justify-content:space-between;color:var(--mu);font-size:.85rem;margin-bottom:6px}
+.score{font-size:2.4rem;font-weight:700;text-align:center;margin:6px 0}
+.w{border-top:1px solid var(--bd);padding:8px 0;font-size:.92rem}
+.w small{color:var(--mu)}
+.hid{display:none}
+input,textarea{font:inherit;color:var(--tx);background:var(--card);border:1.5px solid var(--bd);border-radius:10px;padding:10px 12px;width:100%;box-sizing:border-box;margin-bottom:8px}
+textarea{height:90px;font-size:.8rem}
+.opt.sel{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 14%,transparent)}
+</style>
+</head>
+<body>
+<main>
+<h1>📚 Үгсийн сангийн тест</h1>
+
+<div id="setup">
+ <button class="chip hid" id="prev" style="margin-bottom:12px"></button>
+ <div class="card" id="namecard"><h2>Бүртгэл</h2><input id="nm" placeholder="Овог нэр (заавал)" maxlength="40" autocomplete="off"><input id="cls" placeholder="Анги / бүлэг (жишээ: 9а)" maxlength="20" autocomplete="off" style="margin-bottom:0"></div>
+ <div class="card hid" id="lbox"><h2>Багшийн нууц үг</h2><input id="tpw" type="password" autocomplete="off"><button class="go" id="tok">Нэвтрэх</button><div id="terr" class="hint"></div></div>
+ <div class="card hid" id="tcard"><h2>👩‍🏫 Сурагчдын дүн (зөвхөн багшид харагдана)</h2><div id="tlist" class="hint">Одоогоор дүн алга.</div><input id="codein" placeholder="Сурагчийн кодыг энд буулгах"><button class="chip" id="decode">Код задлах</button><div id="decout"></div>
+ <h2 style="margin-top:14px">Нууц үг солих</h2><input id="newpw" placeholder="Шинэ нууц үг"><button class="chip" id="mkhash">Хэш гаргах</button><div id="hashout" class="hint" style="word-break:break-all"></div></div>
+ <div class="card"><h2>Горим</h2><div class="row" id="modes"></div></div>
+ <div class="card"><h2>Сэдэв</h2><div class="row" id="sets"></div></div>
+ <div class="card hid" id="revcard"><h2>Хариу</h2><div class="row" id="revs"></div></div>
+ <div class="card"><h2>Асуултын тоо</h2><div class="row" id="counts"></div></div>
+ <button class="go" id="start">Эхлэх</button>
+</div>
+
+<div style="text-align:center;margin:8px 0 16px"><button class="chip" id="tlogin">🔐 Багш нэвтрэх</button></div>
+
+<div id="quiz" class="hid">
+ <div class="top"><span id="prog"></span><span id="sc"></span></div>
+ <div class="bar"><i id="barfill" style="width:0"></i></div>
+ <div class="card">
+  <div class="hint" id="label"></div>
+  <div class="q" id="prompt"></div>
+  <div class="hint" id="sub"></div>
+  <div id="opts"></div>
+  <button class="go hid" id="next">Дараагийнх</button>
+ </div>
+</div>
+
+<div id="result" class="hid">
+ <div class="card">
+  <div class="score" id="final"></div>
+  <div class="hint" style="text-align:center" id="pct"></div>
+  <div id="wrong"></div>
+ </div>
+ <button class="go" id="again" style="margin-bottom:8px">Дахин эхлэх</button>
+ <button class="go" id="redo" style="background:var(--card);color:var(--tx)">Алдсан үгсээр давтах</button>
+</div>
+</main>
+
+<script>
+var RAW={
+"Жишээ":[
+"talented|авьяаслаг|He is a talented young musician.",
+"achievement|амжилт, олот|Passing the exam was a great achievement.",
+"explore|судлан шинжлэх|Students explore new ideas in class.",
+"fluent|чөлөөтэй ярьдаг|She is fluent in three languages.",
+"participate|оролцох|All students participate in the discussion.",
+"qualify|эрх авах, шалгарах|He qualified for the national competition.",
+"theory|онол|The theory explains how the brain learns.",
+"understand|ойлгох|I finally understand the concept.",
+"diploma|диплом|She received her diploma at the ceremony."],
+"Боловсрол":[
+"achieve|амжилтад хүрэх|She worked hard to achieve her goals.",
+"curriculum|сургалтын хөтөлбөр|The school updated its curriculum this year.",
+"assess|үнэлэх, дүгнэх|Teachers assess students through exams and projects.",
+"enroll|элсэх, бүртгүүлэх|He enrolled in a university in the capital.",
+"scholarship|тэтгэлэг|She received a scholarship to study abroad.",
+"graduate|төгсөх|He will graduate from high school next year.",
+"lecture|лекц|The professor gave a lecture on climate change.",
+"motivate|урам зориг өгөх|Good teachers motivate their students to learn.",
+"literacy|бичиг үсэг тайлагдсан байдал|Literacy rates have improved worldwide.",
+"academic|эрдэм шинжилгээний|She has a strong academic record.",
+"concentrate|анхаарлаа төвлөрүүлэх|It's hard to concentrate with so much noise.",
+"memorize|цээжлэх|Students need to memorize key vocabulary.",
+"comprehend|ойлгох|It took time to comprehend the difficult text.",
+"evaluate|үнэлгээ өгөх|The committee will evaluate all applications.",
+"discipline|сахилга бат|Discipline is important for academic success.",
+"tuition|сургалтын төлбөр|Tuition fees have increased this semester.",
+"require|шаардах|The course requires a lot of reading.",
+"skill|чадвар|Critical thinking is an essential skill.",
+"research|судалгаа|The team conducted research on student behavior.",
+"knowledge|мэдлэг|Knowledge of grammar helps you write well.",
+"intelligent|ухаалаг|She is an intelligent and hardworking student.",
+"semester|улирал|The spring semester begins in February.",
+"assignment|даалгавар|The teacher gave us a difficult assignment.",
+"degree|эрдмийн зэрэг|He earned a degree in engineering.",
+"encourage|урамшуулах|Parents should encourage their children to read.",
+"explain|тайлбарлах|Can you explain this rule again?",
+"improve|сайжруулах|Reading books can improve your vocabulary.",
+"instruction|заавар|Following the instructions carefully.",
+"progress|ахиц дэвшил|She has made great progress in English.",
+"revise|давтах, засах|I need to revise before the exam.",
+"subject|хичээл, сэдэв|Mathematics is my favorite subject."],
+"Байгаль орчин":[
+"pollution|бохирдол|Air pollution is a serious problem in cities.",
+"sustainable|тогтвортой|We need sustainable solutions for energy.",
+"renewable|сэргээгдэх|Solar power is a renewable energy source.",
+"deforestation|ойн хомсдол|Deforestation harms wildlife habitats.",
+"emission|хаягдал утаа|The factory reduced its carbon emissions.",
+"conserve|хамгаалах, хэмнэх|We must conserve water during droughts.",
+"ecosystem|экосистем|Coral reefs support a rich ecosystem.",
+"drought|ган гачиг|The region suffered a severe drought.",
+"endangered|устаж болзошгүй|The snow leopard is an endangered species.",
+"recycle|дахин боловсруулах|It's important to recycle plastic bottles.",
+"contaminate|бохирдуулах|Chemicals can contaminate the water supply.",
+"habitat|амьдрах орчин|Deforestation destroys animal habitats.",
+"resource|нөөц|Natural resources must be used wisely.",
+"erosion|элэгдэл|Soil erosion reduces farmland quality.",
+"biodiversity|биологийн олон янз байдал|Biodiversity is essential for a healthy planet.",
+"waste|хог хаягдал|Reducing waste helps protect the environment.",
+"climate|уур амьсгал|Climate change affects weather patterns.",
+"atmosphere|агаар мандал|Carbon dioxide traps heat in the atmosphere.",
+"pollutant|бохирдуулагч бодис|Cars release harmful pollutants into the air.",
+"preserve|хамгаалах, хадгалах|We must preserve natural forests.",
+"species|зүйл, төрөл|Many species are at risk of extinction.",
+"extinct|устаж мөхсөн|Dinosaurs became extinct millions of years ago.",
+"global warming|дэлхийн дулаарал|Global warming is melting the polar ice.",
+"greenhouse|хүлэмж|Greenhouse gases contribute to warming.",
+"natural|байгалийн|We should protect natural landscapes.",
+"wildlife|зэрлэг ан амьтан|Pollution threatens local wildlife.",
+"environment|хүрээлэн буй орчин|We all share responsibility for the environment.",
+"disaster|гамшиг|The flood was a natural disaster.",
+"landscape|байгалийн үзэмж|The mountain landscape is breathtaking.",
+"fossil fuel|чулуужсан түлш|Burning fossil fuels increases pollution.",
+"reserve|нөөц газар, хамгаалах|The park is a protected nature reserve.",
+"overpopulation|хэт хүн ам суурьшил|Overpopulation puts pressure on resources."],
+"Phrasal verbs":[
+"ask out|Болзоонд урих|He wants to {ask out} his classmate.",
+"back up|Дэмжих, нөөцлөх|Please {back up} your files before the update.",
+"blow up|Тэсрэх, дэлбэрэх|The balloon will {blow up} if you add more air.",
+"break down|Эвдрэх, сэтгэлээр унах|Our car {broke down} on the way home.",
+"break up|Салж хагацах|They {broke up} after two years.",
+"bring up|Хэлэх, дурьдах, хүмүүжүүлэх|Don't {bring up} that topic at dinner.",
+"call off|Цуцлах|They {called off} the match because of rain.",
+"carry on|Үргэлжлүүлэх|Please {carry on} with your work.",
+"catch up|Гүйцэх|I need to {catch up} with the class.",
+"check in|Бүртгүүлэх (зочид буудал, нисэх онгоц гэх мэт)|We can {check in} at the hotel after 3 p.m.",
+"check out|Гарч явах, шалгах|Guests must {check out} before noon.",
+"clean up|Цэвэрлэх|Let's {clean up} the classroom.",
+"come across|Санаандгүй таарах|I {came across} an old photo yesterday.",
+"come back|Буцаж ирэх|When will you {come back} from the trip?",
+"come in|Орох|Please {come in} and sit down.",
+"come up with|Санаа олох|She {came up with} a great idea.",
+"cut down|Багасгах, хасах|You should {cut down} on sugar.",
+"cut off|Таслах, салгах|They {cut off} the power during the storm.",
+"do over|Давтан хийх|The teacher made me {do over} the whole essay.",
+"dress up|Гоё хувцаслах|We will {dress up} for the party."
+]
+};
+var MODES=[["mn-en","Монгол → English"],["en-mn","English → Монгол"],["blank","Өгүүлбэр: хоосон зай"],["mix","🔀 Холимог (3 горим холилдоно)"]];
+var COUNTS=[0,10,20];
+var state={mode:"mn-en",sets:{},count:0,reveal:false};
+var $=function(i){return document.getElementById(i)};
+var ALL=[];
+Object.keys(RAW).forEach(function(k){RAW[k].forEach(function(s){var p=s.split("|");ALL.push({en:p[0],mn:p[1],s:p[2],set:k})})});
+Object.keys(RAW).forEach(function(k){state.sets[k]=true});
+
+function chips(id,items,isOn,click){
+  var el=$(id);el.innerHTML="";
+  items.forEach(function(it){
+    var b=document.createElement("button");b.className="chip"+(isOn(it[0])?" on":"");b.textContent=it[1];
+    b.onclick=function(){click(it[0]);render()};el.appendChild(b);
+  });
+}
+function render(){
+  chips("modes",MODES,function(v){return state.mode===v},function(v){state.mode=v});
+  chips("sets",Object.keys(RAW).map(function(k){return[k,k+" ("+RAW[k].length+")"]}),function(v){return state.sets[v]},function(v){state.sets[v]=!state.sets[v];if(!Object.keys(state.sets).some(function(k){return state.sets[k]}))state.sets[v]=true});
+  chips("revs",[[0,"Шалгалт (сонгосны дараа харна)"],[1,"Хариуг шууд харуулах"]],function(v){return !!v===state.reveal},function(v){state.reveal=!!v});
+  chips("counts",COUNTS.map(function(c){return[c,c?String(c):"Бүгд"]}),function(v){return state.count===v},function(v){state.count=v});
+}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function blankIt(w){
+  var bm=w.s.match(/\{(.+?)\}/);if(bm)return w.s.replace(bm[0],"_______");
+  var parts=w.en.split(" ");
+  var last=parts[parts.length-1];
+  var stem=last.replace(/(e|y)$/,"");
+  var pre=parts.slice(0,-1).join(" ");
+  var re=new RegExp("\\b"+(pre?pre+" ":"")+stem+"\\w*","i");
+  return re.test(w.s)?w.s.replace(re,"_______"):null;
+}
+var Q=[],idx=0,score=0,wrongs=[],pool=[];
+function start(list){
+  pool=ALL.filter(function(w){return state.sets[w.set]});
+  var src=shuffle(list||pool);
+  if(state.mode==="blank")src=src.filter(function(w){return blankIt(w)});
+  if(!list&&state.count)src=src.slice(0,state.count);
+  if(state.mode==="mix")src=src.map(function(w){var ms=["mn-en","en-mn"];if(blankIt(w))ms.push("blank");return Object.assign({},w,{qm:ms[Math.floor(Math.random()*ms.length)]})});
+  Q=src;idx=0;score=0;wrongs=[];
+  $("setup").classList.add("hid");$("result").classList.add("hid");$("quiz").classList.remove("hid");
+  show();
+}
+function show(){
+  var w=Q[idx],m=w.qm||state.mode;
+  $("prog").textContent=(idx+1)+" / "+Q.length;$("sc").textContent=isT?"✓ "+score:"";
+  $("barfill").style.width=(idx/Q.length*100)+"%";
+  $("next").classList.add("hid");
+  var lab,pr,sub="",key,getA;
+  if(m==="mn-en"){lab="Англи хэлээр юу вэ?";pr=w.mn;key="en";getA=function(x){return x.en}}
+  else if(m==="en-mn"){lab="Монголоор юу гэсэн үг вэ?";pr=w.en;key="mn";getA=function(x){return x.mn}}
+  else{lab="Хоосон зайг нөх";pr=blankIt(w);sub="Утга: "+w.mn;key="en";getA=function(x){return x.en}}
+  $("label").textContent=lab;$("prompt").textContent=pr;$("sub").textContent=sub;
+  var others=shuffle(pool.filter(function(x){return x.mn!==w.mn&&x.en!==w.en}));
+  var seen={};seen[getA(w)]=1;var d=[];
+  for(var i=0;i<others.length&&d.length<3;i++){var a=getA(others[i]);if(!seen[a]){seen[a]=1;d.push(others[i])}}
+  var opts=shuffle([w].concat(d));
+  var box=$("opts");box.innerHTML="";var done=false;
+  opts.forEach(function(o){
+    var b=document.createElement("button");b.className="opt";b.textContent=getA(o);
+    b.onclick=function(){
+      if(done)return;done=true;
+      if(!isT){var ok0=(m==="blank")?o.en===w.en:o.mn===w.mn;if(ok0)score++;else wrongs.push(w);b.classList.add("sel");$("next").textContent=idx+1<Q.length?"Дараагийнх":"Дуусгах";$("next").classList.remove("hid");return}
+      var ok=(m==="en-mn")?o.mn===w.mn:(m==="mn-en"?o.mn===w.mn:o.en===w.en);
+      var kids=box.children;
+      for(var i=0;i<kids.length;i++){
+        var oo=opts[i];var good=(m==="blank")?oo.en===w.en:oo.mn===w.mn&&(m==="en-mn"?true:true);
+        if(m==="en-mn")good=oo.mn===w.mn;
+        if(good)kids[i].classList.add("ok");
+      }
+      if(ok)score++;else{b.classList.add("no");wrongs.push(w)}
+      $("sc").textContent=isT?"✓ "+score:"";
+      $("next").textContent=idx+1<Q.length?"Дараагийнх":"Дүн харах";
+      $("next").classList.remove("hid");
+    };
+    box.appendChild(b);
+  });
+  if(state.reveal&&isT){
+    done=true;$("sc").textContent="";
+    for(var i=0;i<box.children.length;i++){var oo=opts[i];var g=(m==="blank")?oo.en===w.en:oo.mn===w.mn;if(g)box.children[i].classList.add("ok")}
+    $("sub").textContent=(m==="blank"?w.s.replace(/[{}]/g,"")+" — ":"")+w.en+" = "+w.mn;
+    $("next").textContent=idx+1<Q.length?"Дараагийнх":"Дуусгах";
+    $("next").classList.remove("hid");
+  }
+}
+$("next").onclick=function(){idx++;if(idx<Q.length)show();else finish()};
+function finish(){
+  $("again").style.display="";
+  if(!isT)return studentFinish();
+  if(state.reveal){$("quiz").classList.add("hid");$("result").classList.remove("hid");$("final").textContent="Дууслаа 🎉";$("pct").textContent=Q.length+" үг үзлээ";$("wrong").innerHTML="";$("redo").style.display="none";return}
+  $("quiz").classList.add("hid");$("result").classList.remove("hid");
+  $("final").textContent=score+" / "+Q.length;
+  $("pct").textContent=Math.round(score/Q.length*100)+"% зөв";
+  var el=$("wrong");el.innerHTML="";
+  if(wrongs.length){var h=document.createElement("h2");h.textContent="Алдсан үгс";el.appendChild(h)}
+  wrongs.forEach(function(w){
+    var d=document.createElement("div");d.className="w";
+    d.innerHTML="<b></b> — <span></span><br><small></small>";
+    d.children[0].textContent=w.en;d.children[2].textContent=w.mn;d.children[4].textContent=w.s.replace(/[{}]/g,"");
+    el.appendChild(d);
+  });
+  $("redo").style.display=wrongs.length?"block":"none";
+}
+$("start").onclick=function(){
+  if(!isT&&!$("nm").value.trim()){$("nm").style.borderColor="var(--no)";$("nm").focus();return}
+  start()};
+$("again").onclick=function(){$("result").classList.add("hid");$("setup").classList.remove("hid")};
+$("redo").onclick=function(){start(wrongs.slice())};
+function hashPw(s){var h1=0xdeadbeef,h2=0x41c6ce57;for(var i=0,c;i<s.length;i++){c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return String(4294967296*(2097151&h2)+(h1>>>0))}
+var TH="8629925018112537";
+// Google Sheets Web app URL-аа энд хашилтын дунд буулгана. Хоосон бол сурагчид код гарна.
+var SHEET_URL="https://script.google.com/macros/s/AKfycbxrgpjddqtGRgSu1uUN3XfVyKE1BE0noJRiiiwENEqe2UpWS9qjv3GfK3NlcDdKkHlm5Q/exec";
+var isT=false,isOwner=false,DB=null,UID=null;
+function applyRole(){$("tlogin").classList.toggle("hid",isOwner||!$("setup").offsetParent&&false);if(isOwner)$("lbox").classList.add("hid");$("prev").classList.toggle("hid",!isOwner);$("prev").textContent=isT?"👩‍🎓 Сурагчийн горимоор туршиж үзэх":"👩‍🏫 Багшийн горим руу буцах";$("namecard").classList.toggle("hid",isT);$("revcard").classList.toggle("hid",!isT);$("tcard").classList.toggle("hid",!isT)}
+function modeName(v){for(var i=0;i<MODES.length;i++)if(MODES[i][0]===v)return MODES[i][1];return v}
+function renderInto(el,list){
+  el.innerHTML="";
+  if(!list.length){el.textContent="Одоогоор дүн алга.";return}
+  list.forEach(function(r){
+    var d=document.createElement("div");d.className="w";
+    var b=document.createElement("b");b.textContent=r.name+(r.cls?" ("+r.cls+")":"")+" — "+r.score+"/"+r.total+" ("+Math.round(r.score/r.total*100)+"%)";
+    var s=document.createElement("small");s.textContent=" · "+modeName(r.mode)+" · "+new Date(r.ts).toLocaleString();
+    d.appendChild(b);d.appendChild(s);
+    if(r.wrong&&r.wrong.length){var x=document.createElement("div");x.className="hint";x.textContent="Алдсан: "+r.wrong.join("; ");d.appendChild(x)}
+    el.appendChild(d);
+  });
+}
+function studentFinish(){
+  $("quiz").classList.add("hid");$("result").classList.remove("hid");
+  $("again").style.display="none";$("redo").style.display="none";
+  var name=$("nm").value.trim();
+  $("final").textContent="Дууслаа 🎉";$("pct").textContent="Баярлалаа, "+name;
+  var r={name:name,cls:$("cls").value.trim(),mode:state.mode,score:score,total:Q.length,wrong:wrongs.map(function(w){return w.en+" = "+w.mn}),ts:Date.now()};
+  var el=$("wrong");el.innerHTML="";
+  var msg=document.createElement("div");msg.className="hint";msg.style.textAlign="center";el.appendChild(msg);
+  function showCode(){
+    msg.textContent="Доорх кодыг хуулаад багшдаа явуулна уу:";
+    var ta=document.createElement("textarea");ta.readOnly=true;
+    ta.value=btoa(unescape(encodeURIComponent(JSON.stringify(r))));
+    ta.onclick=function(){ta.select()};el.appendChild(ta);
+  }
+  msg.textContent="Илгээж байна...";
+  if(SHEET_URL){fetch(SHEET_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(r)}).then(function(){msg.textContent="Хариулт багшид илгээгдлээ ✅"}).catch(showCode)}
+  else if(DB&&UID){DB.collection("results").doc(UID).set(r).then(function(){msg.textContent="Хариулт багшид илгээгдлээ ✅"}).catch(showCode)}else showCode();
+}
+$("decode").onclick=function(){
+  var o=$("decout");
+  try{var r=JSON.parse(decodeURIComponent(escape(atob($("codein").value.trim()))));renderInto(o,[r])}
+  catch(e){o.textContent="Код буруу байна."}
+};
+(async function(){
+  try{
+    if(window.claude&&claude.use){
+      var u=await claude.use("user");
+      isT=u?await u.isOwner():false;
+      try{UID=u?await u.id():null}catch(e){}
+      DB=await claude.use("db");
+      if(isT&&DB){DB.collection("results").orderBy("ts","desc").onSnapshot(function(s){renderInto($("tlist"),s.docs.map(function(d){return d.data()}))},function(){})}
+    }
+  }catch(e){}
+  isOwner=false;applyRole();
+})();
+$("tlogin").onclick=function(){$("lbox").classList.toggle("hid");$("tpw").focus()};
+$("tok").onclick=function(){if(hashPw($("tpw").value)===TH){isT=true;isOwner=true;$("tpw").value="";$("terr").textContent="";applyRole()}else $("terr").textContent="Нууц үг буруу байна."};
+$("mkhash").onclick=function(){var v=$("newpw").value;if(v)$("hashout").textContent='Файлаас var TH="..." мөрийг хайж, хоорондох тоог солино уу: '+hashPw(v)};
+$("prev").onclick=function(){isT=!isT;applyRole()};
+render();
+</script>
+</body>
+</html>
