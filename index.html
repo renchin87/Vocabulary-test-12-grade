@@ -63,6 +63,7 @@ textarea{height:90px;font-size:.8rem}
   <div class="hint" id="sub"></div>
   <div id="opts"></div>
   <button class="go hid" id="next">Дараагийнх</button>
+  <button class="go hid" id="back" style="margin-top:8px;background:var(--card);color:var(--tx)">← Өмнөх</button>
  </div>
 </div>
 
@@ -208,19 +209,19 @@ function blankIt(w){
   var re=new RegExp("\\b"+(pre?pre+" ":"")+stem+"\\w*","i");
   return re.test(w.s)?w.s.replace(re,"_______"):null;
 }
-var Q=[],idx=0,score=0,wrongs=[],pool=[];
+var Q=[],idx=0,score=0,wrongs=[],pool=[],pending=null,picks=[],optsCache=[];
 function start(list){
   pool=ALL.filter(function(w){return state.sets[w.set]});
   var src=shuffle(list||pool);
   if(state.mode==="blank")src=src.filter(function(w){return blankIt(w)});
   if(!list&&state.count)src=src.slice(0,state.count);
   if(state.mode==="mix")src=src.map(function(w){var ms=["mn-en","en-mn"];if(blankIt(w))ms.push("blank");return Object.assign({},w,{qm:ms[Math.floor(Math.random()*ms.length)]})});
-  Q=src;idx=0;score=0;wrongs=[];
+  Q=src;idx=0;score=0;wrongs=[];picks=[];optsCache=[];
   $("setup").classList.add("hid");$("result").classList.add("hid");$("quiz").classList.remove("hid");
   show();
 }
 function show(){
-  var w=Q[idx],m=w.qm||state.mode;
+  pending=null;var w=Q[idx],m=w.qm||state.mode;
   $("prog").textContent=(idx+1)+" / "+Q.length;$("sc").textContent=isT?"✓ "+score:"";
   $("barfill").style.width=(idx/Q.length*100)+"%";
   $("next").classList.add("hid");
@@ -232,13 +233,13 @@ function show(){
   var others=shuffle(pool.filter(function(x){return x.mn!==w.mn&&x.en!==w.en}));
   var seen={};seen[getA(w)]=1;var d=[];
   for(var i=0;i<others.length&&d.length<3;i++){var a=getA(others[i]);if(!seen[a]){seen[a]=1;d.push(others[i])}}
-  var opts=shuffle([w].concat(d));
+  var opts=optsCache[idx]||(optsCache[idx]=shuffle([w].concat(d)));
   var box=$("opts");box.innerHTML="";var done=false;
   opts.forEach(function(o){
     var b=document.createElement("button");b.className="opt";b.textContent=getA(o);
     b.onclick=function(){
+      if(!isT){picks[idx]=o;var ks=box.children;for(var j=0;j<ks.length;j++)ks[j].classList.remove("sel");b.classList.add("sel");$("next").textContent=idx+1<Q.length?"Дараагийнх":"Дуусгах";$("next").classList.remove("hid");return}
       if(done)return;done=true;
-      if(!isT){var ok0=(m==="blank")?o.en===w.en:o.mn===w.mn;if(ok0)score++;else wrongs.push(w);b.classList.add("sel");$("next").textContent=idx+1<Q.length?"Дараагийнх":"Дуусгах";$("next").classList.remove("hid");return}
       var ok=(m==="en-mn")?o.mn===w.mn:(m==="mn-en"?o.mn===w.mn:o.en===w.en);
       var kids=box.children;
       for(var i=0;i<kids.length;i++){
@@ -253,6 +254,7 @@ function show(){
     };
     box.appendChild(b);
   });
+  if(!isT){var pk=picks[idx];if(pk){for(var j=0;j<opts.length;j++)if(opts[j]===pk)box.children[j].classList.add("sel");$("next").textContent=idx+1<Q.length?"Дараагийнх":"Дуусгах";$("next").classList.remove("hid")}$("back").classList.toggle("hid",idx===0)}else $("back").classList.add("hid");
   if(state.reveal&&isT){
     done=true;$("sc").textContent="";
     for(var i=0;i<box.children.length;i++){var oo=opts[i];var g=(m==="blank")?oo.en===w.en:oo.mn===w.mn;if(g)box.children[i].classList.add("ok")}
@@ -261,10 +263,11 @@ function show(){
     $("next").classList.remove("hid");
   }
 }
-$("next").onclick=function(){idx++;if(idx<Q.length)show();else finish()};
+$("back").onclick=function(){if(idx>0){idx--;show()}};
+$("next").onclick=function(){if(!isT&&pending){if(pending.ok)score++;else wrongs.push(pending.w);pending=null}idx++;if(idx<Q.length)show();else finish()};
 function finish(){
   $("again").style.display="";
-  if(!isT)return studentFinish();
+  if(!isT){score=0;wrongs=[];Q.forEach(function(w,i){var m=w.qm||state.mode;var pk=picks[i];var ok=pk&&((m==="blank")?pk.en===w.en:pk.mn===w.mn);if(ok)score++;else wrongs.push(w)});return studentFinish()}
   if(state.reveal){$("quiz").classList.add("hid");$("result").classList.remove("hid");$("final").textContent="Дууслаа 🎉";$("pct").textContent=Q.length+" үг үзлээ";$("wrong").innerHTML="";$("redo").style.display="none";return}
   $("quiz").classList.add("hid");$("result").classList.remove("hid");
   $("final").textContent=score+" / "+Q.length;
