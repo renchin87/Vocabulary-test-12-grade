@@ -43,7 +43,7 @@ textarea{height:90px;font-size:.8rem}
  <button class="chip hid" id="prev" style="margin-bottom:12px"></button>
  <div class="card" id="namecard"><h2>Бүртгэл</h2><input id="nm" placeholder="Овог нэр (заавал)" maxlength="40" autocomplete="off"><input id="cls" placeholder="Анги / бүлэг (жишээ: 9а)" maxlength="20" autocomplete="off" style="margin-bottom:0"></div>
  <div class="card hid" id="lbox"><h2>Багшийн нууц үг</h2><input id="tpw" type="password" autocomplete="off"><button class="go" id="tok">Нэвтрэх</button><div id="terr" class="hint"></div></div>
- <div class="card hid" id="tcard"><h2>👩‍🏫 Сурагчдын дүн (зөвхөн багшид харагдана)</h2><div id="tlist" class="hint">Одоогоор дүн алга.</div><input id="codein" placeholder="Сурагчийн кодыг энд буулгах"><button class="chip" id="decode">Код задлах</button><div id="decout"></div>
+ <div class="card hid" id="tcard"><h2>👩‍🏫 Сурагчдын дүн (зөвхөн багшид харагдана)</h2><div id="tlist" class="hint">Одоогоор дүн алга.</div>
  <h2 style="margin-top:14px">Нууц үг солих</h2><input id="newpw" placeholder="Шинэ нууц үг"><button class="chip" id="mkhash">Хэш гаргах</button><div id="hashout" class="hint" style="word-break:break-all"></div></div>
  <div class="card"><h2>Горим</h2><div class="row" id="modes"></div></div>
  <div class="card"><h2>Сэдэв</h2><div class="row" id="sets"></div></div>
@@ -308,24 +308,21 @@ function studentFinish(){
   $("again").style.display="none";$("redo").style.display="none";
   var name=$("nm").value.trim();
   $("final").textContent="Дууслаа 🎉";$("pct").textContent="Баярлалаа, "+name;
-  var r={name:name,cls:$("cls").value.trim(),mode:state.mode,score:score,total:Q.length,wrong:wrongs.map(function(w){return w.en+" = "+w.mn}),ts:Date.now()};
+  var r={name:name,cls:$("cls").value.trim(),mode:state.mode,score:score,total:Q.length,pct:Math.round(score/Q.length*100)+"%",wrong:wrongs.map(function(w){return w.en+" = "+w.mn}),ts:Date.now()};
   var el=$("wrong");el.innerHTML="";
   var msg=document.createElement("div");msg.className="hint";msg.style.textAlign="center";el.appendChild(msg);
   function showCode(){
-    msg.textContent="Доорх кодыг хуулаад багшдаа явуулна уу:";
-    var ta=document.createElement("textarea");ta.readOnly=true;
-    ta.value=btoa(unescape(encodeURIComponent(JSON.stringify(r))));
-    ta.onclick=function(){ta.select()};el.appendChild(ta);
+    msg.textContent="Илгээж чадсангүй. Интернэтээ шалгаад дахин оролдоно уу.";
+    var rb=document.createElement("button");rb.className="go";rb.textContent="Дахин илгээх";
+    rb.onclick=function(){rb.remove();send()};el.appendChild(rb);
   }
+  function send(){
   msg.textContent="Илгээж байна...";
   if(SHEET_URL){fetch(SHEET_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(r)}).then(function(){msg.textContent="Хариулт багшид илгээгдлээ ✅"}).catch(showCode)}
   else if(DB&&UID){DB.collection("results").doc(UID).set(r).then(function(){msg.textContent="Хариулт багшид илгээгдлээ ✅"}).catch(showCode)}else showCode();
+  }
+  send();
 }
-$("decode").onclick=function(){
-  var o=$("decout");
-  try{var r=JSON.parse(decodeURIComponent(escape(atob($("codein").value.trim()))));renderInto(o,[r])}
-  catch(e){o.textContent="Код буруу байна."}
-};
 (async function(){
   try{
     if(window.claude&&claude.use){
