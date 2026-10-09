@@ -29,6 +29,10 @@ h2{font-size:.95rem;color:var(--mu);margin:0 0 8px;font-weight:600}
 .score{font-size:2.4rem;font-weight:700;text-align:center;margin:6px 0}
 .w{border-top:1px solid var(--bd);padding:8px 0;font-size:.92rem}
 .w small{color:var(--mu)}
+@keyframes okp{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 65%,transparent)}100%{box-shadow:0 0 0 14px transparent}}
+@keyframes shk{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.opt.ok{animation:okp .7s ease-out}.opt.no{animation:shk .4s}
+@media (prefers-reduced-motion:reduce){.opt.ok,.opt.no{animation:none}}
 .hid{display:none}
 input,textarea{font:inherit;color:var(--tx);background:var(--card);border:1.5px solid var(--bd);border-radius:10px;padding:10px 12px;width:100%;box-sizing:border-box;margin-bottom:8px}
 textarea{height:90px;font-size:.8rem}
@@ -37,7 +41,7 @@ textarea{height:90px;font-size:.8rem}
 </head>
 <body>
 <main>
-<h1>📚 Үгсийн сангийн тест</h1>
+<div style="display:flex;justify-content:space-between;align-items:center"><h1>📚 Үгсийн сангийн тест</h1><button class="chip" id="theme" title="Харанхуй / цайвар">🌓</button></div>
 
 <div id="setup">
  <button class="chip hid" id="prev" style="margin-bottom:12px"></button>
@@ -53,6 +57,14 @@ textarea{height:90px;font-size:.8rem}
 </div>
 
 <div style="text-align:center;margin:8px 0 16px"><button class="chip" id="tlogin">🔐 Багш нэвтрэх</button></div>
+
+<div id="cards" class="hid">
+ <div class="top"><span id="cprog"></span><button class="chip" id="cexit">✕ Гарах</button></div>
+ <div class="card" id="cface" style="min-height:200px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer"></div>
+ <div class="row" style="justify-content:space-between">
+  <button class="chip" id="cprev">← Өмнөх</button><button class="chip" id="cspk">🔊</button><button class="chip" id="cflip">🔄 Эргүүлэх</button><button class="chip" id="cnext">Дараагийнх →</button>
+ </div>
+</div>
 
 <div id="quiz" class="hid">
  <div class="top"><span id="prog"></span><span id="sc"></span></div>
@@ -178,7 +190,7 @@ var RAW={
 "dress up|Гоё хувцаслах|We will {dress up} for the party."
 ]
 };
-var MODES=[["mn-en","Монгол → English"],["en-mn","English → Монгол"],["blank","Өгүүлбэр: хоосон зай"],["mix","🔀 Холимог (3 горим холилдоно)"]];
+var MODES=[["mn-en","Монгол → English"],["en-mn","English → Монгол"],["blank","Өгүүлбэр: хоосон зай"],["mix","🔀 Холимог (3 горим холилдоно)"],["cards","🃏 Карт (цээжлэх)"]];
 var COUNTS=[0,10,20];
 var state={mode:"mn-en",sets:{},count:0,reveal:false};
 var $=function(i){return document.getElementById(i)};
@@ -209,9 +221,25 @@ function blankIt(w){
   var re=new RegExp("\\b"+(pre?pre+" ":"")+stem+"\\w*","i");
   return re.test(w.s)?w.s.replace(re,"_______"):null;
 }
+var VOICES=[];
+function loadV(){try{VOICES=speechSynthesis.getVoices()||[]}catch(e){}}
+if(window.speechSynthesis){loadV();speechSynthesis.onvoiceschanged=loadV}
+function toast(m){var d=document.getElementById("toast");if(!d){d=document.createElement("div");d.id="toast";d.style.cssText="position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#222;color:#fff;padding:12px 14px;border-radius:10px;font-size:.9rem;z-index:99;text-align:center";document.body.appendChild(d)}d.textContent=m;d.style.display="block";clearTimeout(d._t);d._t=setTimeout(function(){d.style.display="none"},4000)}
+function speak(t){
+  if(!window.speechSynthesis){toast("Энэ хөтөч дуудлагыг дэмжихгүй байна. Chrome хөтчөөр нээнэ үү.");return}
+  try{
+    var s=speechSynthesis;if(s.speaking||s.pending)s.cancel();
+    var u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.9;u.volume=1;
+    var v=VOICES.filter(function(x){return /^en/i.test(x.lang)})[0];if(v){u.voice=v;u.lang=v.lang}
+    u.onerror=function(){toast("Дуудлага тоглохгүй байна. Утасны медиа дууг (volume) болон хөтчийн англи хэлний дууг шалгана уу.")};
+    setTimeout(function(){s.speak(u);if(s.paused)s.resume()},80);
+  }catch(e){toast("Дуудлага тоглуулж чадсангүй.")}
+}
+function spkBtn(t){var b=document.createElement("button");b.className="chip";b.textContent="🔊";b.style.cssText="padding:2px 8px;margin-left:8px;font-size:.9rem";b.onclick=function(e){e.stopPropagation();speak(t)};return b}
 var Q=[],idx=0,score=0,wrongs=[],pool=[],pending=null,picks=[],optsCache=[];
 function start(list){
   pool=ALL.filter(function(w){return state.sets[w.set]});
+  if(state.mode==="cards"&&!list)return startCards();
   var src=shuffle(list||pool);
   if(state.mode==="blank")src=src.filter(function(w){return blankIt(w)});
   if(!list&&state.count)src=src.slice(0,state.count);
@@ -230,6 +258,7 @@ function show(){
   else if(m==="en-mn"){lab="Монголоор юу гэсэн үг вэ?";pr=w.en;key="mn";getA=function(x){return x.mn}}
   else{lab="Хоосон зайг нөх";pr=blankIt(w);sub="Утга: "+w.mn;key="en";getA=function(x){return x.en}}
   $("label").textContent=lab;$("prompt").textContent=pr;$("sub").textContent=sub;
+  if(m==="en-mn"&&window.speechSynthesis)$("prompt").appendChild(spkBtn(w.en));
   var others=shuffle(pool.filter(function(x){return x.mn!==w.mn&&x.en!==w.en}));
   var seen={};seen[getA(w)]=1;var d=[];
   for(var i=0;i<others.length&&d.length<3;i++){var a=getA(others[i]);if(!seen[a]){seen[a]=1;d.push(others[i])}}
@@ -259,6 +288,7 @@ function show(){
     done=true;$("sc").textContent="";
     for(var i=0;i<box.children.length;i++){var oo=opts[i];var g=(m==="blank")?oo.en===w.en:oo.mn===w.mn;if(g)box.children[i].classList.add("ok")}
     $("sub").textContent=(m==="blank"?w.s.replace(/[{}]/g,"")+" — ":"")+w.en+" = "+w.mn;
+    if(window.speechSynthesis)$("sub").appendChild(spkBtn(w.en));
     $("next").textContent=idx+1<Q.length?"Дараагийнх":"Дуусгах";
     $("next").classList.remove("hid");
   }
@@ -277,13 +307,26 @@ function finish(){
   wrongs.forEach(function(w){
     var d=document.createElement("div");d.className="w";
     d.innerHTML="<b></b> — <span></span><br><small></small>";
-    d.children[0].textContent=w.en;d.children[2].textContent=w.mn;d.children[4].textContent=w.s.replace(/[{}]/g,"");
+    d.childNodes[0].textContent=w.en;d.childNodes[2].textContent=w.mn;d.childNodes[4].textContent=w.s.replace(/[{}]/g,"");
+    if(window.speechSynthesis)d.appendChild(spkBtn(w.en));
     el.appendChild(d);
   });
   $("redo").style.display=wrongs.length?"block":"none";
 }
+var CL=[],ci=0,flipped=false;
+function startCards(){CL=shuffle(pool);if(state.count)CL=CL.slice(0,state.count);ci=0;flipped=false;$("setup").classList.add("hid");$("cards").classList.remove("hid");drawCard()}
+function drawCard(){var w=CL[ci];$("cprog").textContent=(ci+1)+" / "+CL.length;var f=$("cface");f.innerHTML="";
+ var a=document.createElement("div");a.style.fontSize="1.8rem";a.style.fontWeight="700";
+ var h=document.createElement("div");h.className="hint";h.style.marginTop="10px";
+ if(!flipped){a.textContent=w.en;h.textContent="Дарж эргүүлнэ үү"}else{a.textContent=w.mn;h.textContent=w.s.replace(/[{}]/g,"")}
+ f.appendChild(a);f.appendChild(h)}
+$("cface").onclick=$("cflip").onclick=function(){flipped=!flipped;drawCard()};
+$("cnext").onclick=function(){if(ci<CL.length-1){ci++;flipped=false;drawCard()}};
+$("cprev").onclick=function(){if(ci>0){ci--;flipped=false;drawCard()}};
+$("cspk").onclick=function(){speak(CL[ci].en)};
+$("cexit").onclick=function(){$("cards").classList.add("hid");$("setup").classList.remove("hid")};
 $("start").onclick=function(){
-  if(!isT&&!$("nm").value.trim()){$("nm").style.borderColor="var(--no)";$("nm").focus();return}
+  if(!isT&&state.mode!=="cards"&&!$("nm").value.trim()){$("nm").style.borderColor="var(--no)";$("nm").focus();return}
   start()};
 $("again").onclick=function(){$("result").classList.add("hid");$("setup").classList.remove("hid")};
 $("redo").onclick=function(){start(wrongs.slice())};
@@ -342,6 +385,10 @@ $("tlogin").onclick=function(){$("lbox").classList.toggle("hid");$("tpw").focus(
 $("tok").onclick=function(){if(hashPw($("tpw").value)===TH){isT=true;isOwner=true;$("tpw").value="";$("terr").textContent="";applyRole()}else $("terr").textContent="Нууц үг буруу байна."};
 $("mkhash").onclick=function(){var v=$("newpw").value;if(v)$("hashout").textContent='Файлаас var TH="..." мөрийг хайж, хоорондох тоог солино уу: '+hashPw(v)};
 $("prev").onclick=function(){isT=!isT;applyRole()};
+(function(){var r=document.documentElement;
+function cur(){return r.getAttribute("data-theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light")}
+try{var s=localStorage.getItem("theme");if(s)r.setAttribute("data-theme",s)}catch(e){}
+$("theme").onclick=function(){var n=cur()==="dark"?"light":"dark";r.setAttribute("data-theme",n);try{localStorage.setItem("theme",n)}catch(e){}}})();
 render();
 </script>
 </body>
