@@ -55,9 +55,8 @@ textarea{height:90px;font-size:.8rem}
  <div class="card hid" id="revcard"><h2>Хариу</h2><div class="row" id="revs"></div></div>
  <div class="card"><h2>Асуултын тоо</h2><div class="row" id="counts"></div></div>
  <button class="go" id="start">Эхлэх</button>
+ <div style="text-align:center;margin:12px 0 4px"><button class="chip" id="tlogin">🔐 Багш нэвтрэх</button></div>
 </div>
-
-<div style="text-align:center;margin:8px 0 16px"><button class="chip" id="tlogin">🔐 Багш нэвтрэх</button></div>
 
 <div id="cards" class="hid">
  <div class="top"><span id="cprog"></span><button class="chip" id="cexit">✕ Гарах</button></div>
@@ -230,34 +229,6 @@ var GRAMR=[
 ["D",19,"i","The decision [A] made by a jury about whether a [B] people is innocent [C] or guilty of a [D] crime is called a [E] verdict.","made|people|or|crime|verdict","B"]
 ];
 var GR2=[
-["2021 · C",[
-[20,"The buildings are often destroyed by ____ after violent movement of the ground.","forest fire|flood|earthquake|snowstorm|hurricane","C"],
-[21,"Most young children don't read newspapers, they prefer to read ____.","magazines|comics|journals|newspapers|adverts","B"],
-[22,"The ____ attack people in a public place.","robberies|shoplifters|thieves|muggers|burglars","D"],
-[23,"The best ____ movie I've ever seen was Star Wars. It was about the space mission.","action|cartoon|horror|crime|science fiction","E"],
-[24,"A ____ is a small place that sells most things but especially food and household goods.","supermarket|toy store|bookstore|hardware store|department store","A"],
-[25,"My car broke ____ again and I had to go to work on foot.","of|out|off|down|into","D"],
-[26,"My husband has beautiful blue eyes. I hope our children will take ____ him.","to|up|after|off|for","C"],
-[27,"Due to the storm, I put ____ to my doctor's appointment until the following week.","on|off|up|out|down","B"],
-[28,"As he was cleaning his attic he came ____ an old photograph of his grandmother.","back|round|up|across|out","D"],
-[29,"Device inside a computer that stores large amounts of information.","Disk drive|Word processor|Modem|Spreadsheet|Hard disk","E"],
-[30,"He lays out and adds headlines to newspaper pages.","A sub-editor|A foreign correspondent|A continuity person|A critic|A make-up artist","A"],
-[31,"A program or the grid you create with it to perform mathematical operations.","Modem|Disk drive|Hard disk|Spreadsheet|Word processor","D"],
-[32,"Wow! Look at outside now. It's raining cats and dogs today. I wish I'd brought my umbrella to work.","I forgot my cats and dogs.|I forgot my umbrella today|It's raining heavily|Cats and dogs are falling from the sky.|Cats and dogs are outside","C"]]],
-["2021 · D",[
-[20,"The town was severely damaged by ____ after the heavy rain.","hurricane|forest fire|snowstorm|flood|earthquake","D"],
-[21,"I quite like the ____. There are many interesting adverts.","documentary|quiz show|chat show|soap opera|television commercials","E"],
-[22,"There are a lot of ____ in this part of town, so always close the windows and lock the door.","burglars|shoplifters|thieves|robberies|muggers","A"],
-[23,"The young people like to read ____ with interesting words and pictures about a new product to make people buy it.","newspapers|papers|magazines|adverts|journals","D"],
-[24,"A ____ is a large store that sells different things.","bookstore|toy store|department store|hardware store|stationery","C"],
-[25,"The truck broke ____ on the motorway and caused a major traffic jam.","away|over|into|out|down","E"],
-[26,"You should check in two hours before your flight is scheduled to take ____.","into|up|for|off|after","D"],
-[27,"She didn't put ____ her jacket as it wasn't cold outside.","on|down|away|off|up","A"],
-[28,"She came ____ a huge amount of money when her cousin died.","by|to|into|out|up","C"],
-[29,"He reports on events in other countries.","A sub-editor|A foreign correspondent|An artist|A critic|A continuity person","B"],
-[30,"An apparatus that allows information to be read from a disk or stored.","Spreadsheet|Hard disk|Modem|Disk drive|Word processor","D"],
-[31,"Someone puts special paint, color on the faces of people who are to appear on TV.","A critic|A continuity person|A sub-editor|A foreign correspondent|A make-up artist","E"],
-[32,"Since the young women won the Olympics they have been in seventh heaven. Their long training wish was fulfilled.","to be extremely happy|to be extremely boring|to get a big award|to get a good condition|to win easily","A"]]],
 ["2022 · C",[
 [18,"We can travel to Brighton ____ by bus or by train; the fare is almost the same.","both|none|either|neither|all","C"],
 [19,"The more he exercises, ____ he will be.","healtiest|the healthier|healthier|the healtiest|healthy","B"],
@@ -388,15 +359,18 @@ var GR2=[
 [32,"I think he has the flu because you don't usually throw ____ when you have a cold.","on|out|up|off|back","C"],
 [33,"My grandma said, \"If you don't wear an undershirt, you'll ____ down with pneumonia.\"","come|get|put|take|hold","A"]]]
 ];
-GR2.forEach(function(s){s[1].forEach(function(q){GRAMR.push(["Vocab "+s[0],q[0],"g",q[1],q[2],q[3]])})});
+GR2.forEach(function(s){s[1].forEach(function(q){GRAMR.push(["Шалгалт "+s[0],q[0],"g",q[1],q[2],q[3]])})});
 var GRAM=GRAMR.map(function(r){var o=r[4].split("|"),a=[];for(var k=0;k<r[5].length;k++)a.push(r[5].charCodeAt(k)-65);
- return {g:1,set:(r[0].length>1?r[0]:"Grammar 2021 · "+r[0]),num:r[1],t:r[2],q:r[3],o:o,a:a,en:(r[0].length>1?r[0]:"Grammar 2021 · "+r[0])+"-"+r[1],mn:a.map(function(i){return String.fromCharCode(65+i)+". "+o[i]}).join(" / "),s:r[3]}});
-var MODES=[["mn-en","Монгол → English"],["en-mn","English → Монгол"],["blank","Өгүүлбэр: хоосон зай"],["mix","🔀 Холимог (3 горим холилдоно)"],["cards","🃏 Карт (цээжлэх)"],["gram","📝 Шалгалтын материал (Grammar, Vocab)"]];
+ return {g:1,set:(r[0].length>1?r[0]:"Шалгалт 2021 · "+r[0]),num:r[1],t:r[2],q:r[3],o:o,a:a,en:(r[0].length>1?r[0]:"Шалгалт 2021 · "+r[0])+"-"+r[1],mn:a.map(function(i){return String.fromCharCode(65+i)+". "+o[i]}).join(" / "),s:r[3]}});
+var MODES=[["mn-en","Монгол → English"],["en-mn","English → Монгол"],["blank","Өгүүлбэр: хоосон зай"],["mix","🔀 Холимог (3 горим холилдоно)"],["cards","🃏 Карт (цээжлэх)"],["gram","📝 Шалгалт 2021–2025"]];
 var COUNTS=[0,10,20];
 var state={mode:"mn-en",sets:{},count:0,reveal:false};
 var $=function(i){return document.getElementById(i)};
 var ALL=[];
-Object.keys(RAW).forEach(function(k){RAW[k].forEach(function(s){var p=s.split("|");ALL.push({en:p[0],mn:p[1],s:p[2],set:k})})});
+/* Монгол орчуулгын эхний үсгийг жижиг болгоно (Phrasal verbs дээр зөв хариулт том үсгээр эхэлж байгаад ялгарч харагдаж байсан) */
+function lc(s){return s?s.charAt(0).toLowerCase()+s.slice(1):s}
+function esc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}
+Object.keys(RAW).forEach(function(k){RAW[k].forEach(function(s){var p=s.split("|");ALL.push({en:p[0],mn:lc(p[1]),s:p[2],set:k})})});
 Object.keys(RAW).forEach(function(k){state.sets[k]=true});
 GRAM.forEach(function(g){state.sets[g.set]=true});
 
@@ -416,13 +390,15 @@ function render(){
 }
 function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
 function blankIt(w){
-  var bm=w.s.match(/\{(.+?)\}/);if(bm)return w.s.replace(bm[0],"_______");
+  var bm=(w.s||"").match(/\{(.+?)\}/);if(bm)return w.s.replace(bm[0],"_______");
   var parts=w.en.split(" ");
   var last=parts[parts.length-1];
   var stem=last.replace(/(e|y)$/,"");
   var pre=parts.slice(0,-1).join(" ");
-  var re=new RegExp("\\b"+(pre?pre+" ":"")+stem+"\\w*","i");
-  return re.test(w.s)?w.s.replace(re,"_______"):null;
+  try{
+    var re=new RegExp("\\b"+(pre?esc(pre)+" ":"")+esc(stem)+"\\w*","i");
+    return re.test(w.s||"")?w.s.replace(re,"_______"):null;
+  }catch(e){return null}
 }
 var VOICES=[];
 function loadV(){try{VOICES=speechSynthesis.getVoices()||[]}catch(e){}}
@@ -440,6 +416,10 @@ function speak(t){
 }
 function spkBtn(t){var b=document.createElement("button");b.className="chip";b.textContent="🔊";b.style.cssText="padding:2px 8px;margin-left:8px;font-size:.9rem";b.onclick=function(e){e.stopPropagation();speak(t)};return b}
 var Q=[],idx=0,score=0,wrongs=[],pool=[],pending=null,picks=[],optsCache=[];
+function begin(){
+  $("setup").classList.add("hid");$("result").classList.add("hid");$("quiz").classList.remove("hid");
+  show();
+}
 function start(list){
   if(state.mode==="gram")return startGram(list);
   pool=ALL.filter(function(w){return state.sets[w.set]});
@@ -447,10 +427,10 @@ function start(list){
   var src=shuffle(list||pool);
   if(state.mode==="blank")src=src.filter(function(w){return blankIt(w)});
   if(!list&&state.count)src=src.slice(0,state.count);
+  if(!src.length){toast("Энэ сэдвээс асуулт гарсангүй. Өөр сэдэв эсвэл горим сонгоно уу.");return}
   if(state.mode==="mix")src=src.map(function(w){var ms=["mn-en","en-mn"];if(blankIt(w))ms.push("blank");return Object.assign({},w,{qm:ms[Math.floor(Math.random()*ms.length)]})});
   Q=src;idx=0;score=0;wrongs=[];picks=[];optsCache=[];
-  $("setup").classList.add("hid");$("result").classList.add("hid");$("quiz").classList.remove("hid");
-  show();
+  begin();
 }
 function showGram(w){
   $("prog").textContent=(idx+1)+" / "+Q.length;$("sc").textContent=isT?"✓ "+score:"";
@@ -478,9 +458,9 @@ function showGram(w){
 function startGram(list){
   var src=list||shuffle(GRAM.filter(function(g){return state.sets[g.set]}));
   if(!list&&state.count)src=src.slice(0,state.count);
+  if(!src.length){toast("Асуулт олдсонгүй. Сэдэв сонгоно уу.");return}
   Q=src;idx=0;score=0;wrongs=[];picks=[];optsCache=[];
-  $("setup").classList.add("hid");$("result").classList.add("hid");$("quiz").classList.remove("hid");
-  show();
+  begin();
 }
 function show(){
   pending=null;$("prompt").style.fontSize="";var w=Q[idx],m=w.qm||state.mode;
@@ -504,11 +484,11 @@ function show(){
     b.onclick=function(){
       if(!isT){picks[idx]=o;var ks=box.children;for(var j=0;j<ks.length;j++)ks[j].classList.remove("sel");b.classList.add("sel");$("next").textContent=idx+1<Q.length?"Дараагийнх":"Дуусгах";$("next").classList.remove("hid");return}
       if(done)return;done=true;
-      var ok=(m==="en-mn")?o.mn===w.mn:(m==="mn-en"?o.mn===w.mn:o.en===w.en);
+      var ok=(m==="blank")?o.en===w.en:o.mn===w.mn;
       var kids=box.children;
       for(var i=0;i<kids.length;i++){
-        var oo=opts[i];var good=(m==="blank")?oo.en===w.en:oo.mn===w.mn&&(m==="en-mn"?true:true);
-        if(m==="en-mn")good=oo.mn===w.mn;
+        var oo=opts[i];
+        var good=(m==="blank")?oo.en===w.en:oo.mn===w.mn;
         if(good)kids[i].classList.add("ok");
       }
       if(ok)score++;else{b.classList.add("no");wrongs.push(w)}
@@ -529,7 +509,7 @@ function show(){
   }
 }
 $("back").onclick=function(){if(idx>0){idx--;show()}};
-$("next").onclick=function(){if(!isT&&pending){if(pending.ok)score++;else wrongs.push(pending.w);pending=null}idx++;if(idx<Q.length)show();else finish()};
+$("next").onclick=function(){idx++;if(idx<Q.length)show();else finish()};
 function finish(){
   $("again").style.display="";
   if(!isT){score=0;wrongs=[];Q.forEach(function(w,i){var m=w.qm||state.mode;var pk=picks[i];var ok=w.g?(pk!==undefined&&w.a.indexOf(pk)>=0):(pk&&((m==="blank")?pk.en===w.en:pk.mn===w.mn));if(ok)score++;else wrongs.push(w)});return studentFinish()}
@@ -549,7 +529,7 @@ function finish(){
   $("redo").style.display=wrongs.length?"block":"none";
 }
 var CL=[],ci=0,flipped=false;
-function startCards(){CL=shuffle(pool);if(state.count)CL=CL.slice(0,state.count);ci=0;flipped=false;$("setup").classList.add("hid");$("cards").classList.remove("hid");drawCard()}
+function startCards(){CL=shuffle(pool);if(state.count)CL=CL.slice(0,state.count);if(!CL.length){toast("Үг олдсонгүй. Сэдэв сонгоно уу.");return}ci=0;flipped=false;$("setup").classList.add("hid");$("cards").classList.remove("hid");drawCard()}
 function drawCard(){var w=CL[ci];$("cprog").textContent=(ci+1)+" / "+CL.length;var f=$("cface");f.innerHTML="";
  var a=document.createElement("div");a.style.fontSize="1.8rem";a.style.fontWeight="700";
  var h=document.createElement("div");h.className="hint";h.style.marginTop="10px";
@@ -568,9 +548,9 @@ $("redo").onclick=function(){start(wrongs.slice())};
 function hashPw(s){var h1=0xdeadbeef,h2=0x41c6ce57;for(var i=0,c;i<s.length;i++){c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return String(4294967296*(2097151&h2)+(h1>>>0))}
 var TH="8629925018112537";
 // Google Sheets Web app URL-аа энд хашилтын дунд буулгана. Хоосон бол сурагчид код гарна.
-var SHEET_URL="https://script.google.com/macros/s/AKfycbzG4Sj_C_GERKl67YpOEElZgb_LjLdqb02hv7JQ8cTYwxGlWZg10V8Q11eodTyT54ENBA/exec";
+var SHEET_URL="https://script.google.com/macros/s/AKfycbzABNOPZAHr_uyBk6A1G1mpoakcXfIyvhBWV95U9Su7xNqhaIiEFIwW2nwVUdtN2ZBG/exec";
 var isT=false,isOwner=false,DB=null,UID=null;
-function applyRole(){$("tlogin").classList.toggle("hid",isOwner||!$("setup").offsetParent&&false);if(isOwner)$("lbox").classList.add("hid");$("prev").classList.toggle("hid",!isOwner);$("prev").textContent=isT?"👩‍🎓 Сурагчийн горимоор туршиж үзэх":"👩‍🏫 Багшийн горим руу буцах";$("namecard").classList.toggle("hid",isT);$("revcard").classList.toggle("hid",!isT);$("tcard").classList.toggle("hid",!isT)}
+function applyRole(){$("tlogin").classList.toggle("hid",isOwner);if(isOwner)$("lbox").classList.add("hid");$("prev").classList.toggle("hid",!isOwner);$("prev").textContent=isT?"👩‍🎓 Сурагчийн горимоор туршиж үзэх":"👩‍🏫 Багшийн горим руу буцах";$("namecard").classList.toggle("hid",isT);$("revcard").classList.toggle("hid",!isT);$("tcard").classList.toggle("hid",!isT)}
 function modeName(v){for(var i=0;i<MODES.length;i++)if(MODES[i][0]===v)return MODES[i][1];return v}
 function renderInto(el,list){
   el.innerHTML="";
@@ -590,7 +570,7 @@ function studentFinish(){
   var name=$("nm").value.trim();
   $("final").textContent="Дууслаа 🎉";$("pct").textContent="Баярлалаа, "+name;
   var us=[];Q.forEach(function(w){if(w.set&&us.indexOf(w.set)<0)us.push(w.set)});
-  var r={title:modeName(state.mode)+(us.length?" · "+us.join(", "):""),name:name,cls:$("cls").value.trim(),mode:state.mode,score:score,total:Q.length,pct:Math.round(score/Q.length*100)+"%",wrong:wrongs.map(function(w){return w.en+" = "+w.mn}),ts:Date.now()};
+  var r={kind:(state.mode==="gram"?"Шалгалт":"Үгийн сан"),sets:us.join(", "),modeName:modeName(state.mode),year:(us.join(" ").match(/\d{4}/g)||[]).filter(function(y,i,a){return a.indexOf(y)===i}).join(", "),title:modeName(state.mode)+(us.length?" · "+us.join(", "):""),name:name,cls:$("cls").value.trim(),mode:state.mode,score:score,total:Q.length,pct:Math.round(score/Q.length*100)+"%",wrong:wrongs.map(function(w){return w.en+" = "+w.mn}),ts:Date.now()};
   var el=$("wrong");el.innerHTML="";
   var msg=document.createElement("div");msg.className="hint";msg.style.textAlign="center";el.appendChild(msg);
   function showCode(){
@@ -630,663 +610,11 @@ function loadExtra(){
   if(!SHEET_URL||!window.fetch)return;
   fetch(SHEET_URL).then(function(r){return r.json()}).then(function(d){
     (d.words||[]).forEach(function(x){
+      if(!x.en||!x.mn)return;
       var set=x.set||"Нэмэлт";
       if(!RAW[set]){RAW[set]=[];state.sets[set]=true}
       RAW[set].push(x.en+"|"+x.mn+"|"+(x.s||""));
-      ALL.push({en:x.en,mn:x.mn,s:x.s||"",set:set});
-    });
-    (d.gram||[]).forEach(function(x){
-      var o=x.o||[],a=[];
-      for(var k=0;k<(x.a||"").length;k++){var i=x.a.charCodeAt(k)-65;if(i>=0&&i<o.length)a.push(i)}
-      if(!x.q||o.length<2||!a.length)return;
-      var set=x.set||"Нэмэлт";
-      state.sets[set]=true;
-      GRAM.push({g:1,set:set,num:x.num,t:x.t==="i"?"i":"g",q:x.q,o:o,a:a,en:set+"-"+x.num,mn:a.map(function(i){return String.fromCharCode(65+i)+". "+o[i]}).join(" / "),s:x.q});
-    });
-    render();
-  }).catch(function(){});
-}
-render();
-loadExtra();
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="mn">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Үгсийн сангийн тест</title>
-<style>
-:root{--bg:#f6f8fa;--card:#fff;--tx:#1b2430;--mu:#5d6b7a;--ac:#1f7a8c;--bd:#d7dee5;--ok:#1e8e4e;--okb:#e0f5e9;--no:#c0392b;--nob:#fbe5e2;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10161c;--card:#1a232c;--tx:#e8eef3;--mu:#97a6b5;--ac:#4fb3c6;--bd:#2d3a46;--ok:#58d68d;--okb:#17331f;--no:#ec7063;--nob:#3a1d1a}}
-:root[data-theme="dark"]{--bg:#10161c;--card:#1a232c;--tx:#e8eef3;--mu:#97a6b5;--ac:#4fb3c6;--bd:#2d3a46;--ok:#58d68d;--okb:#17331f;--no:#ec7063;--nob:#3a1d1a}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45}
-main{max-width:560px;margin:0 auto;padding:16px}
-h1{font-size:1.3rem;margin:4px 0 14px}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:12px}
-h2{font-size:.95rem;color:var(--mu);margin:0 0 8px;font-weight:600}
-.row{display:flex;flex-wrap:wrap;gap:8px}
-.chip,.opt,.go{font:inherit;color:var(--tx);background:var(--card);border:1.5px solid var(--bd);border-radius:10px;padding:10px 12px;cursor:pointer;text-align:left}
-.chip.on{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 14%,transparent);font-weight:600}
-.go{width:100%;background:var(--ac);color:#fff;border-color:var(--ac);text-align:center;font-weight:600;font-size:1rem}
-.q{font-size:1.25rem;font-weight:600;margin:6px 0 4px}
-.hint{color:var(--mu);font-size:.9rem;margin-bottom:12px}
-.opt{display:block;width:100%;margin-bottom:8px}
-.opt.ok{border-color:var(--ok);background:var(--okb)}
-.opt.no{border-color:var(--no);background:var(--nob)}
-.bar{height:6px;background:var(--bd);border-radius:3px;margin-bottom:12px}
-.bar i{display:block;height:100%;background:var(--ac);border-radius:3px}
-.top{display:flex;justify-content:space-between;color:var(--mu);font-size:.85rem;margin-bottom:6px}
-.score{font-size:2.4rem;font-weight:700;text-align:center;margin:6px 0}
-.w{border-top:1px solid var(--bd);padding:8px 0;font-size:.92rem}
-.w small{color:var(--mu)}
-@keyframes okp{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 65%,transparent)}100%{box-shadow:0 0 0 14px transparent}}
-@keyframes shk{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
-.opt.ok{animation:okp .7s ease-out}.opt.no{animation:shk .4s}
-@media (prefers-reduced-motion:reduce){.opt.ok,.opt.no{animation:none}}
-.hid{display:none}
-input,textarea{font:inherit;color:var(--tx);background:var(--card);border:1.5px solid var(--bd);border-radius:10px;padding:10px 12px;width:100%;box-sizing:border-box;margin-bottom:8px}
-textarea{height:90px;font-size:.8rem}
-.opt.sel{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 14%,transparent)}
-</style>
-</head>
-<body>
-<main>
-<div style="display:flex;justify-content:space-between;align-items:center"><h1>📚 Үгсийн сангийн тест</h1><button class="chip" id="theme" title="Харанхуй / цайвар">🌓</button></div>
-
-<div id="setup">
- <button class="chip hid" id="prev" style="margin-bottom:12px"></button>
- <div class="card" id="namecard"><h2>Бүртгэл</h2><input id="nm" placeholder="Овог нэр (заавал)" maxlength="40" autocomplete="off"><input id="cls" placeholder="Анги / бүлэг (жишээ: 9а)" maxlength="20" autocomplete="off" style="margin-bottom:0"></div>
- <div class="card hid" id="lbox"><h2>Багшийн нууц үг</h2><input id="tpw" type="password" autocomplete="off"><button class="go" id="tok">Нэвтрэх</button><div id="terr" class="hint"></div></div>
- <div class="card hid" id="tcard"><h2>👩‍🏫 Сурагчдын дүн (зөвхөн багшид харагдана)</h2><div id="tlist" class="hint">Одоогоор дүн алга.</div>
- <div class="hint">📥 Материал нэмэх: Google Sheets-ийн <b>Үгс</b> болон <b>Дүрэм</b> хуудсанд шинэ мөр нэмнэ. Сурагчид хуудсыг нээх үед автоматаар орно.</div>
- <h2 style="margin-top:14px">Нууц үг солих</h2><input id="newpw" placeholder="Шинэ нууц үг"><button class="chip" id="mkhash">Хэш гаргах</button><div id="hashout" class="hint" style="word-break:break-all"></div></div>
- <div class="card"><h2>Горим</h2><div class="row" id="modes"></div></div>
- <div class="card"><h2>Сэдэв</h2><div class="row" id="sets"></div></div>
- <div class="card hid" id="revcard"><h2>Хариу</h2><div class="row" id="revs"></div></div>
- <div class="card"><h2>Асуултын тоо</h2><div class="row" id="counts"></div></div>
- <button class="go" id="start">Эхлэх</button>
-</div>
-
-<div style="text-align:center;margin:8px 0 16px"><button class="chip" id="tlogin">🔐 Багш нэвтрэх</button></div>
-
-<div id="cards" class="hid">
- <div class="top"><span id="cprog"></span><button class="chip" id="cexit">✕ Гарах</button></div>
- <div class="card" id="cface" style="min-height:200px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer"></div>
- <div class="row" style="justify-content:space-between">
-  <button class="chip" id="cprev">← Өмнөх</button><button class="chip" id="cspk">🔊</button><button class="chip" id="cflip">🔄 Эргүүлэх</button><button class="chip" id="cnext">Дараагийнх →</button>
- </div>
-</div>
-
-<div id="quiz" class="hid">
- <div class="top"><span id="prog"></span><span id="sc"></span></div>
- <div class="bar"><i id="barfill" style="width:0"></i></div>
- <div class="card">
-  <div class="hint" id="label"></div>
-  <div class="q" id="prompt"></div>
-  <div class="hint" id="sub"></div>
-  <div id="opts"></div>
-  <button class="go hid" id="next">Дараагийнх</button>
-  <button class="go hid" id="back" style="margin-top:8px;background:var(--card);color:var(--tx)">← Өмнөх</button>
- </div>
-</div>
-
-<div id="result" class="hid">
- <div class="card">
-  <div class="score" id="final"></div>
-  <div class="hint" style="text-align:center" id="pct"></div>
-  <div id="wrong"></div>
- </div>
- <button class="go" id="again" style="margin-bottom:8px">Дахин эхлэх</button>
- <button class="go" id="redo" style="background:var(--card);color:var(--tx)">Алдсан үгсээр давтах</button>
-</div>
-</main>
-
-<script>
-var RAW={
-"Жишээ":[
-"talented|авьяаслаг|He is a talented young musician.",
-"achievement|амжилт, олот|Passing the exam was a great achievement.",
-"explore|судлан шинжлэх|Students explore new ideas in class.",
-"fluent|чөлөөтэй ярьдаг|She is fluent in three languages.",
-"participate|оролцох|All students participate in the discussion.",
-"qualify|эрх авах, шалгарах|He qualified for the national competition.",
-"theory|онол|The theory explains how the brain learns.",
-"understand|ойлгох|I finally understand the concept.",
-"diploma|диплом|She received her diploma at the ceremony."],
-"Боловсрол":[
-"achieve|амжилтад хүрэх|She worked hard to achieve her goals.",
-"curriculum|сургалтын хөтөлбөр|The school updated its curriculum this year.",
-"assess|үнэлэх, дүгнэх|Teachers assess students through exams and projects.",
-"enroll|элсэх, бүртгүүлэх|He enrolled in a university in the capital.",
-"scholarship|тэтгэлэг|She received a scholarship to study abroad.",
-"graduate|төгсөх|He will graduate from high school next year.",
-"lecture|лекц|The professor gave a lecture on climate change.",
-"motivate|урам зориг өгөх|Good teachers motivate their students to learn.",
-"literacy|бичиг үсэг тайлагдсан байдал|Literacy rates have improved worldwide.",
-"academic|эрдэм шинжилгээний|She has a strong academic record.",
-"concentrate|анхаарлаа төвлөрүүлэх|It's hard to concentrate with so much noise.",
-"memorize|цээжлэх|Students need to memorize key vocabulary.",
-"comprehend|ойлгох|It took time to comprehend the difficult text.",
-"evaluate|үнэлгээ өгөх|The committee will evaluate all applications.",
-"discipline|сахилга бат|Discipline is important for academic success.",
-"tuition|сургалтын төлбөр|Tuition fees have increased this semester.",
-"require|шаардах|The course requires a lot of reading.",
-"skill|чадвар|Critical thinking is an essential skill.",
-"research|судалгаа|The team conducted research on student behavior.",
-"knowledge|мэдлэг|Knowledge of grammar helps you write well.",
-"intelligent|ухаалаг|She is an intelligent and hardworking student.",
-"semester|улирал|The spring semester begins in February.",
-"assignment|даалгавар|The teacher gave us a difficult assignment.",
-"degree|эрдмийн зэрэг|He earned a degree in engineering.",
-"encourage|урамшуулах|Parents should encourage their children to read.",
-"explain|тайлбарлах|Can you explain this rule again?",
-"improve|сайжруулах|Reading books can improve your vocabulary.",
-"instruction|заавар|Following the instructions carefully.",
-"progress|ахиц дэвшил|She has made great progress in English.",
-"revise|давтах, засах|I need to revise before the exam.",
-"subject|хичээл, сэдэв|Mathematics is my favorite subject."],
-"Байгаль орчин":[
-"pollution|бохирдол|Air pollution is a serious problem in cities.",
-"sustainable|тогтвортой|We need sustainable solutions for energy.",
-"renewable|сэргээгдэх|Solar power is a renewable energy source.",
-"deforestation|ойн хомсдол|Deforestation harms wildlife habitats.",
-"emission|хаягдал утаа|The factory reduced its carbon emissions.",
-"conserve|хамгаалах, хэмнэх|We must conserve water during droughts.",
-"ecosystem|экосистем|Coral reefs support a rich ecosystem.",
-"drought|ган гачиг|The region suffered a severe drought.",
-"endangered|устаж болзошгүй|The snow leopard is an endangered species.",
-"recycle|дахин боловсруулах|It's important to recycle plastic bottles.",
-"contaminate|бохирдуулах|Chemicals can contaminate the water supply.",
-"habitat|амьдрах орчин|Deforestation destroys animal habitats.",
-"resource|нөөц|Natural resources must be used wisely.",
-"erosion|элэгдэл|Soil erosion reduces farmland quality.",
-"biodiversity|биологийн олон янз байдал|Biodiversity is essential for a healthy planet.",
-"waste|хог хаягдал|Reducing waste helps protect the environment.",
-"climate|уур амьсгал|Climate change affects weather patterns.",
-"atmosphere|агаар мандал|Carbon dioxide traps heat in the atmosphere.",
-"pollutant|бохирдуулагч бодис|Cars release harmful pollutants into the air.",
-"preserve|хамгаалах, хадгалах|We must preserve natural forests.",
-"species|зүйл, төрөл|Many species are at risk of extinction.",
-"extinct|устаж мөхсөн|Dinosaurs became extinct millions of years ago.",
-"global warming|дэлхийн дулаарал|Global warming is melting the polar ice.",
-"greenhouse|хүлэмж|Greenhouse gases contribute to warming.",
-"natural|байгалийн|We should protect natural landscapes.",
-"wildlife|зэрлэг ан амьтан|Pollution threatens local wildlife.",
-"environment|хүрээлэн буй орчин|We all share responsibility for the environment.",
-"disaster|гамшиг|The flood was a natural disaster.",
-"landscape|байгалийн үзэмж|The mountain landscape is breathtaking.",
-"fossil fuel|чулуужсан түлш|Burning fossil fuels increases pollution.",
-"reserve|нөөц газар, хамгаалах|The park is a protected nature reserve.",
-"overpopulation|хэт хүн ам суурьшил|Overpopulation puts pressure on resources."],
-"Phrasal verbs":[
-"ask out|Болзоонд урих|He wants to {ask out} his classmate.",
-"back up|Дэмжих, нөөцлөх|Please {back up} your files before the update.",
-"blow up|Тэсрэх, дэлбэрэх|The balloon will {blow up} if you add more air.",
-"break down|Эвдрэх, сэтгэлээр унах|Our car {broke down} on the way home.",
-"break up|Салж хагацах|They {broke up} after two years.",
-"bring up|Хэлэх, дурьдах, хүмүүжүүлэх|Don't {bring up} that topic at dinner.",
-"call off|Цуцлах|They {called off} the match because of rain.",
-"carry on|Үргэлжлүүлэх|Please {carry on} with your work.",
-"catch up|Гүйцэх|I need to {catch up} with the class.",
-"check in|Бүртгүүлэх (зочид буудал, нисэх онгоц гэх мэт)|We can {check in} at the hotel after 3 p.m.",
-"check out|Гарч явах, шалгах|Guests must {check out} before noon.",
-"clean up|Цэвэрлэх|Let's {clean up} the classroom.",
-"come across|Санаандгүй таарах|I {came across} an old photo yesterday.",
-"come back|Буцаж ирэх|When will you {come back} from the trip?",
-"come in|Орох|Please {come in} and sit down.",
-"come up with|Санаа олох|She {came up with} a great idea.",
-"cut down|Багасгах, хасах|You should {cut down} on sugar.",
-"cut off|Таслах, салгах|They {cut off} the power during the storm.",
-"do over|Давтан хийх|The teacher made me {do over} the whole essay.",
-"dress up|Гоё хувцаслах|We will {dress up} for the party."
-]
-};
-var GRAMR=[
-["C",1,"g","They run ____ organization to help the homeless people in our country.","an|a|the|-|an","AE"],
-["C",2,"g","Frank is ____ man in his family.","most careful|more careful|the most careful|carefully|careful","C"],
-["C",3,"g","We bought ____ chair for our grandmother's birthday present last week.","wonderful / wooden / modern|modern / wooden / wonderful|wooden / modern / wonderful|wonderful / modern / wooden|modern / wonderful / wooden","D"],
-["C",4,"g","The big car is twice ____ the small one.","as cheap|as cheap as|cheap|cheaper than|cheapest","B"],
-["C",5,"g","My father could speak English ____ when he was young.","more fluently|fluent|fluenter|more fluent|fluently","E"],
-["C",6,"g","The police discovered vital evidence ____ led to arrest of the thief.","that|where|when|which|who","AD"],
-["C",7,"g","They're ____ a wedding anniversary next week.","having|have|had|has|been having","A"],
-["C",8,"g","James ____ up early in the morning then he ____ cold water every day.","get / drinks|get / drink|gets / drinks|got / drank|gets / drank","C"],
-["C",9,"g","My sister is 18 now but she ____ many medals for sport competitions.","has been|has had|had had|have has|has having","B"],
-["C",10,"g","James and John ____ a lot of responsibilities in their jobs for 15 years.","has been taking|is taking|been taking|have been taking|takes","D"],
-["C",11,"g","My friend ____ everyone else in the match and won easily.","has outplayed|outplay|outplaying|outplays|outplayed","E"],
-["C",12,"g","The Browns ____ well treated now they are very rude.","used to be|used to being|use to be|using to being|used be","A"],
-["C",13,"g","We ____ by a disturbance in the Street yesterday.","have woken|was woken|woken|were woken|had woken","D"],
-["C",14,"g","The winner of our competition ____ on show recently.","were announced|have been announced|has been announced|are announced|have announced","C"],
-["C",15,"g","He said \"I met them last weekend\". He said that ____.","he had met last weekend|he had met them the previous weekend|he met them the previous weekend|he had met them the previous weekend|he met the previous weekend","BD"],
-["C",16,"g","If he ____ his essay writing assignment, he would call to his teacher.","will finish|had finished|finishes|finishing|finished","E"],
-["C",17,"i","Since we [A] have supported [B] each other for so long and we [C] have won college [D] baseball games [E] much times.","have|each other|have won|baseball games|much","E"],
-["C",18,"i","We [A] also collected old [B] paper, recycled items and old [C] clothes to donate to [D] those [E] which are less fortunate than ourselves.","also|paper|clothes|those|which","E"],
-["C",19,"i","The crime of [A] demanding money from somebody [B] in exchange for keeping [C] information about [D] them secret is [E] called blackmail.","demanding|in|information|them|called","D"],
-["D",1,"g","We organize ____ competition for students to participate once a week.","a|an|-|the|any","A"],
-["D",2,"g","Tom is ____ person than his classmates.","the most jealous|jealous|more jealous|most jealous|jealously","C"],
-["D",3,"g","They brought a ____ dressing table for their grandmother's birthday present.","antique / wooden / comfortable|comfortable / wooden / antique|wooden / antique / comfortable|comfortable / antique / wooden|antique / comfortable / wooden","D"],
-["D",4,"g","The red car is twice ____ the black one.","expensive|as expensive|more expensive|most expensive|as expensive as","E"],
-["D",5,"g","The nurse brought her round ____ after the surgery.","more gently|gently|gentler|gentle|more gentle","B"],
-["D",6,"g","The women ____ car is parked behind the house is a doctor.","that|who|which|whose|Whom","D"],
-["D",7,"g","My parents are ____ a wedding anniversary next month.","had|have|been having|has|having","E"],
-["D",8,"g","James ____ up early in the morning then he ____ coffee every day.","wakes / drank|wake / drink|wakes / drinks|wake / drinks|woke / drank","C"],
-["D",9,"g","My friend is 20 now but she ____ many certificates of the tournaments.","had had|has been|have has|has had|has having","D"],
-["D",10,"g","He ____ a lot of responsibilities in his job as a teacher for 10 years.","has been taking|have been taking|been taking|takes|is taking","A"],
-["D",11,"g","They ____ to widen the main road into the city center last week.","decide|decides|deciding|have decided|decided","E"],
-["D",12,"g","Mary ____ badly treated now she is very polite.","using to be|used to being|use to be|used to be|used be","D"],
-["D",13,"g","My baby ____ by a loud noise in the room last night.","had woken|woken|was woken|have woken|were woken","C"],
-["D",15,"g","He said \"I am busy now\". He said that ____.","he has been busy then|he were busy then|he was busy then|he is busy now.|he is busy then","C"],
-["D",16,"g","If he hadn't become a sprinter, he ____ to have been a fast bowler.","have loved|would have loved|loved|loves|has loved","B"],
-["D",17,"i","Depression [A] is caused [B] much reasons and what [C] worries us is [D] the children get [E] depressed easily.","is|much|worries|the|depressed","B"],
-["D",19,"i","The decision [A] made by a jury about whether a [B] people is innocent [C] or guilty of a [D] crime is called a [E] verdict.","made|people|or|crime|verdict","B"]
-];
-var GR2=[
-["2021 · C",[
-[20,"The buildings are often destroyed by ____ after violent movement of the ground.","forest fire|flood|earthquake|snowstorm|hurricane","C"],
-[21,"Most young children don't read newspapers, they prefer to read ____.","magazines|comics|journals|newspapers|adverts","B"],
-[22,"The ____ attack people in a public place.","robberies|shoplifters|thieves|muggers|burglars","D"],
-[23,"The best ____ movie I've ever seen was Star Wars. It was about the space mission.","action|cartoon|horror|crime|science fiction","E"],
-[24,"A ____ is a small place that sells most things but especially food and household goods.","supermarket|toy store|bookstore|hardware store|department store","A"],
-[25,"My car broke ____ again and I had to go to work on foot.","of|out|off|down|into","D"],
-[26,"My husband has beautiful blue eyes. I hope our children will take ____ him.","to|up|after|off|for","C"],
-[27,"Due to the storm, I put ____ to my doctor's appointment until the following week.","on|off|up|out|down","B"],
-[28,"As he was cleaning his attic he came ____ an old photograph of his grandmother.","back|round|up|across|out","D"],
-[29,"Device inside a computer that stores large amounts of information.","Disk drive|Word processor|Modem|Spreadsheet|Hard disk","E"],
-[30,"He lays out and adds headlines to newspaper pages.","A sub-editor|A foreign correspondent|A continuity person|A critic|A make-up artist","A"],
-[31,"A program or the grid you create with it to perform mathematical operations.","Modem|Disk drive|Hard disk|Spreadsheet|Word processor","D"],
-[32,"Wow! Look at outside now. It's raining cats and dogs today. I wish I'd brought my umbrella to work.","I forgot my cats and dogs.|I forgot my umbrella today|It's raining heavily|Cats and dogs are falling from the sky.|Cats and dogs are outside","C"]]],
-["2021 · D",[
-[20,"The town was severely damaged by ____ after the heavy rain.","hurricane|forest fire|snowstorm|flood|earthquake","D"],
-[21,"I quite like the ____. There are many interesting adverts.","documentary|quiz show|chat show|soap opera|television commercials","E"],
-[22,"There are a lot of ____ in this part of town, so always close the windows and lock the door.","burglars|shoplifters|thieves|robberies|muggers","A"],
-[23,"The young people like to read ____ with interesting words and pictures about a new product to make people buy it.","newspapers|papers|magazines|adverts|journals","D"],
-[24,"A ____ is a large store that sells different things.","bookstore|toy store|department store|hardware store|stationery","C"],
-[25,"The truck broke ____ on the motorway and caused a major traffic jam.","away|over|into|out|down","E"],
-[26,"You should check in two hours before your flight is scheduled to take ____.","into|up|for|off|after","D"],
-[27,"She didn't put ____ her jacket as it wasn't cold outside.","on|down|away|off|up","A"],
-[28,"She came ____ a huge amount of money when her cousin died.","by|to|into|out|up","C"],
-[29,"He reports on events in other countries.","A sub-editor|A foreign correspondent|An artist|A critic|A continuity person","B"],
-[30,"An apparatus that allows information to be read from a disk or stored.","Spreadsheet|Hard disk|Modem|Disk drive|Word processor","D"],
-[31,"Someone puts special paint, color on the faces of people who are to appear on TV.","A critic|A continuity person|A sub-editor|A foreign correspondent|A make-up artist","E"],
-[32,"Since the young women won the Olympics they have been in seventh heaven. Their long training wish was fulfilled.","to be extremely happy|to be extremely boring|to get a big award|to get a good condition|to win easily","A"]]],
-["2022 · C",[
-[18,"We can travel to Brighton ____ by bus or by train; the fare is almost the same.","both|none|either|neither|all","C"],
-[19,"The more he exercises, ____ he will be.","healtiest|the healthier|healthier|the healtiest|healthy","B"],
-[20,"Alex is very ____ of his younger sister.","protect|protection|protected|protective|protector","D"],
-[21,"When you go to the town, could you please buy a ____ of jam for me?","bar|can|bag|carton|jar","E"],
-[22,"My boss ____ this language course to me.","influenced|persuaded|recommended|criticized|maintained","C"],
-[23,"The Professor just wanted to ____ the importance of learning foreign languages.","grasp|integrate|damage|emphasize|extend","D"],
-[24,"The forecast is for dry, sunny weather with no ____ expected.","degradation|desertification|permission|protection|precipitation","E"],
-[25,"Millions of birds migrate to the south every year. It is an annual ____.","celebration|motivation|perception|phenomenon|behavior","D"],
-[26,"Synthetic fabrics are made from ____ substances, not natural ones.","artificial|organic|unique|modern|combined","A"],
-[27,"Many foreign ____ attended the opening ceremony.","scavengers|failures|abilities|attempts|dignitaries","E"],
-[28,"If I could do it ____ again, I'd do it differently.","in|without|away|over|with","D"],
-[29,"After the thieves are captured, the stolen items will be turned ____ to the rightful owners.","in|away|over|against|down","C"],
-[30,"Be careful walking in the woods, there are a lot of branches sticking ____.","to|at|by|out|with","D"],
-[31,"The man was desperate to get rid of his car. So I was able to buy it for a song.","His car was expensive.|He sang a song in his car.|He exchanged his car for a different one.|He bought a CD with his favorite songs.|He bought the car very cheaply.","E"],
-[32,"I only got the message by word of mouth.","He read the message from the newspaper.|The message was passed by his mom.|He opened his mouth while he was reading the message.|The message passed from person to person.|He was only mouthing the message.","D"]]],
-["2022 · D",[
-[18,"____ Jim nor Tom passed the exam.","Neither|Both|Either|All|None","A"],
-[19,"The more he looked at her, ____ embarrassed she was.","the more|the most|more|mostly|much","A"],
-[20,"John is ____ and needs help when asked to sign papers.","literate|literally|literacy|illiteracy|illiterate","E"],
-[21,"We must get a ____ of flour, and some eggs and apples, so we can make an apple pie for dessert.","box|can|tube|bag|bar","D"],
-[22,"Children ____ their necks to see who their mother was talking to.","nodded|spilled|fluttered|ignored|craned","E"],
-[23,"Teaching English in a lively interesting way increases students' ____ to learn.","volunteering|tolerance|motivation|diversity|automation","C"],
-[24,"Regular exercise is good for your body and brain. It ____ your blood with oxygen.","stores|enriches|influences|processes|produces","B"],
-[25,"My ____ is that you're not getting enough work done.","concentration|occupation|concern|action|attachment","C"],
-[26,"The heavy rain flooded the field, and the ground was muddy. Under these ____ the kids couldn't play.","willingness|circumstances|decisions|basements|cells","B"],
-[27,"The two countries have ____ close ties for centuries.","confused|distracted|maintained|debated|ignored","C"],
-[28,"Because of some mistakes in my test, my teacher made me do it ____.","without|over|away|in|with","B"],
-[29,"It's getting late, I'm turning ____.","in|around|into|up|off","A"],
-[30,"Chimgee is nearly eight feet tall and has red hair, so she really sticks ____ in a crowd.","out|down|around|with|to","A"],
-[31,"Jake and I lost our jobs yesterday. Now we are in the same boat.","They are in the broken boat.|They have a good situation.|They are in the same bad situation.|They are looking for a job.|They are travelling by boat.","C"],
-[32,"Chimgee got it in the neck because she forgot to turn off the car light last night.","The long drive hurt her neck.|She was punished for the damage to the car battery.|She forgot to turn off the car light.|Her shirt was open at the neck.|She was punished for the damage to the car light.","B"],
-[33,"My girlfriend always acts as if she were born yesterday.","She was born yesterday.|Her boyfriend doesn't know what she really wants.|She believes that the best way to learn is by experience.|She is naive because she doesn't have much experience in life.|His girlfriend is very thoughtful.","D"]]],
-["2023 · C",[
-[19,"You need to acquire ____ in social work.","operation|application|necessity|qualification|cooperation","D"],
-[20,"Roads should have a ____ so that people can cross the road safely.","dead end|intersection|zebra crossing|one-way street|lane","C"],
-[21,"The level of junk food ____ was illustrated by statistics.","consideration|compulsion|consumption|combination|compassion","C"],
-[22,"When fossil fuels burn, different substances are ____ into the air.","accelerated|tapped|trapped|supplied|released","E"],
-[23,"Jack has already ____ a very good reputation as a talented prosecutor.","achieved|won|done|made|gained","E"],
-[24,"The cave of the Apocalypse in Greece is in the list of UNESCO world ____ sites.","heritage|representation|legacy|tradition|masterpiece","A"],
-[25,"Always ____ your files and any documents you're working on.","back up|hack into|log in|click on|crash on","A"],
-[26,"Anna: You must come and visit us some time. Don't keep putting it off. Tom: Yes, I'll come and see you in the not too distant future. (Tom's reaction: ____)","promise|demand|offer|prediction|appointment","A"],
-[27,"Sharon: Who is the girl? Do you know her? John: She must be Alice's daughter. She looks just like her. (John's reaction: ____)","criticism|complaint|compliment|assumption|suggestion","D"],
-[28,"a valuable / a rich / a reliable ____","Source|Determination|Enthusiasm|Guarantee","A"],
-[29,"____ knowledge / ____ wisdom / ____ information","To earn|To conduct|To instruct|To impart|To endure","D"],
-[30,"I struggle to speak for a long time and say 'Err' a lot when I ____.","run out of ideas|avoid pronouncing words|find my spoken fluency|provide feedback on the grammatical accuracy|have a significant impact","A"],
-[31,"Choose the most possible solution to flood.","stonework|wind turbines|dams and canals|tunnels and subways|sea barrier","C"],
-[32,"He was late and made up some cock-and-bull story about losing his car keys.","He was involved in illegal activities.|Other people thought he was true.|He told a fake story.|He told a story about animals.|He was upset about being late.","C"],
-[33,"The computer he gave you isn't the best one in the world, but you shouldn't look a gift horse in the mouth.","The computer is a bad gift.|You should not complain about the gift given to you.|You should give back the computer to him.|Never receive a gift you don't like.|Receiving a horse as a gift is his hobby.","B"]]],
-["2023 · D",[
-[19,"I've got great ____ on my assignment from the teacher who remarked how I could improve on it.","debate|portfolio|feedback|grant|finance","C"],
-[20,"He lied to me and to make matters worse, he didn't ____ at all.","accept|thank|risk|admit|apologize","E"],
-[21,"The particles that make up plasmas have electric charges, so plasmas can ____ electricity.","dissolve|attract|affect|insulate|conduct","E"],
-[22,"Many groups are working to reduce ____ to protect pastureland in the Gobi region.","soil erosion|hazards|blizzard|drought|gale","A"],
-[23,"In the tournament, Hannah ____ all her opponents and won the gold medal.","beat|gained|had|granted|rewarded","A"],
-[24,"The little boy's eyes ____ when he saw his daddy.","flowed|shone|lightened|lit up|darkened","D"],
-[25,"I was working on my presentation and suddenly the screen ____ black.","installed|crashed|went|loaded|turned","CE"],
-[26,"Alice: You were late for the meeting this morning! Tom: I feel sorry for being tardy. The alarm didn't go off. (Tom is ____)","denying|refusing|making an excuse|requesting|regretting","C"],
-[27,"Anna: Would you like some black coffee? John: I can't drink bitter coffee. (John's reaction: ____)","opinion|refusal|offer|confusion|excuse","B"],
-[28,"go on a ____ / a balanced ____ / sensible ____","meal|solution|plan|diet|date","D"],
-[29,"____ tears / ____ laughter / ____ song","to let out|to make|to burst into|to bump into|to cry over","C"],
-[30,"I recognize a few words in the passage, therefore, I ____.","am not eager to learn new words|keep my mouth shut like a fish|find it easy to understand the whole content|never look up a new word in a dictionary|try hard to catch the meaning of every word","E"],
-[31,"Choose the most possible solution to air pollution.","temporary shelters|dump sites|organic products|hybrid cars|exhaust fumes","D"],
-[32,"Finally the department's solution to the problem hit the nail on the head.","The staff's solution was not bad.|The accident was caused by the failures.|The staff did exactly right.|The staff's act was quite smart.|The staff hit the box of nails","C"],
-[33,"The police will arrest the suspect by hook or by crook.","They will use any method possible.|They will use technological devices.|They will mobilize all units.|They will investigate all offenders.|They will be on duty at check-points.","A"]]],
-["2024 · C",[
-[19,"The rain won't last long; it's only a ____.","downpour|breeze|hail|frost|shower","E"],
-[20,"____ is a person whose job is riding horses in races.","Swimmer|Fencer|Runner|Jockey|Golfer","D"],
-[21,"The theory of ____ studies the nature and origin of the universe.","biology|physics|cosmology|chemistry|medicine","C"],
-[22,"The ability of zoom ____ is particularly useful when you are working on detailed diagrams.","out|in|up|on|over","B"],
-[23,"Which word fits all three gaps? A(n) ____ is a tall bird with long thin legs. / The house was put back onto the truck by ____. / The boy ____ his neck to get the first glimpse of a celebrity.","move(d)|ostrich|lever|crane(d)|stretch(ed)","D"],
-[26,"What will you take with you when you reach the mountain's peak?","climbing gear|hiking boots|a fencing sword|bowling pins|a mountain bike","A"],
-[27,"What expression is used for making others experience pain?","to relieve pain|to feel pain|to ease pain|to inflict pain|to experience pain","D"],
-[28,"A(n) ____ ageing substance / ____ viral drug / ____ depressant treatment (prefix)","non-|pro-|anti-|pre-|ante-","C"],
-[29,"History (____) novels (suffix)","-ic|-ical|-ian|-ous|-ish","B"],
-[30,"Tonya spends a lot of money ____ fancy clothes.","for|over|in|on|onto","D"],
-[31,"The answer was ____ the tip of my tongue, but I just couldn't remember it.","with|at|in|from|on","E"],
-[32,"It really got Mr Robert's goat when he had to wait two hours to get his plane tickets.","He was annoyed at the long delay.|He was angry because he couldn't get the ticket.|He didn't care about the long line.|He was frustrated because he was late for the flight.|He didn't mind the long delay.","A"],
-[33,"He really caught it in the neck because he didn't put the fire out.","He was captured.|He was praised.|He was scolded.|He was disgraced.|He was rewarded.","C"]]],
-["2024 · D",[
-[19,"I would love to be a good ____, but my eyesight isn't very good.","gymnast|archer|high jumper|weight lifter|canoeist","B"],
-[20,"It was absolutely pouring down yesterday. It was a real ____.","hurricane|shower|gale|downpour|blizzard","D"],
-[21,"____ studies the rocks and similar substances that make up the Earth's surface.","Geometry|Geography|Geology|Archaeology|Astrology","C"],
-[22,"For security reasons, always log ____ when you leave your computer unattended for any period of time.","out|in|on|for|up","A"],
-[23,"Which word fits all three gaps? Please, print your name and address in ____ letters. / My boyfriend and I live on the same ____. / Every autumn dead leaves ____ the drains.","block|capital|clog|bulk|fill","A"],
-[26,"What will you wear when you go hiking?","a walking stick|climbing boots|walking boots|camping gear|a surfing board","C"],
-[27,"What expression is used for making pain go away?","to inflict pain|to suffer pain|to cause pain|to complain of pain|to soothe pain","E"],
-[28,"A(n) ____ war Europe / ____ traumatic stress disorder / ____ industrial age (prefix)","com-|sub-|inter-|trans-|post-","E"],
-[29,"A persist(____) learner (suffix)","-ent|-ant|-ence|-ance|-ible","A"],
-[30,"My uncle suffers ____ a type of diabetes.","about|of|with|off|from","E"],
-[31,"I asked our neighbors to keep an eye ____ the house while we were away.","for|over|at|on|with","D"],
-[32,"The bad news had an adverse effect on her and she became more down in the dumps as the day passed.","happy and encouraged|having a mixed emotion|sad and discouraged|gloomy but peaceful|dejected but energetic","C"],
-[33,"Who wears trousers in your family?","be financially dependent on the spouse|be the dominant partner in a marriage|be a caregiver of the family|be the most educated family member|be the only breadwinner of the family","B"]]],
-["2025 · C",[
-[14,"Which item is made from cotton?","a shirt|a raincoat|a wristband|nylons|a jumper","A"],
-[15,"A young cow is called a ____.","cub|foal|lamb|fawn|calf","E"],
-[16,"A ____ is a part of the building where a vehicle is kept.","concrete|patio|garage|shade|garden","C"],
-[17,"Name the means of transport which is controlled by a captain and stops at a port.","ship|airplane|spaceship|subway|tram","A"],
-[18,"A ____ uses a computer or smartphone to commit crimes.","vandal|fraudster|cybercriminal|mugger|kidnapper","C"],
-[19,"I just can't come out with you tonight as I've got so ____ with my work.","away|up|over|behind|along","D"],
-[20,"It was sunny and hot.","We had a bit of heat wave.|There were a few sunny showers.|It was very overcast.|There was quite a breeze.|There was a bit of drizzle.","A"],
-[21,"I love it here. Everything I want is only five minutes away. It's so ____.","inconvenient|efficient|convenient|crowded|stressful","C"],
-[22,"They won two nil. ('nil' is used for ...)","the score in a tennis match|the temperature|a telephone number|the result of a football match|the year somebody was born","D"],
-[26,"Ron hired the best lawyer he could find to defend him. He ____ not guilty.","identified|called|sentenced|committed|pleaded","E"],
-[27,"When he was ____ to give evidence, he said he had been somewhere else over 100 miles away.","identified|called|sentenced|committed|pleaded","B"],
-[28,"He said he had been over 100 miles away when the crime was ____.","identified|called|sentenced|committed|pleaded","D"],
-[29,"Three witnesses ____ him as the man they had seen at the scene of the crime.","identified|called|sentenced|committed|pleaded","A"],
-[30,"He was found guilty and ____ to three years in prison.","identified|called|sentenced|committed|pleaded","C"],
-[31,"In which sentence does \"to take off\" mean \"to remove something from a surface\"?","If this business takes off, we could make a lot of money.|Take off your shoes. You're getting mud on the carpet.|Our plane took off an hour late because of the snow.|You need to take the old wax off the floor before you wax it again.|Alfonso always takes the skin off chicken before he cooks it.","D"],
-[32,"The store owner was held ____ by three men wearing ski masks.","in|back|down|up|on","D"],
-[33,"I'm sorry to cancel, but I just don't ____ up to going dancing today.","look|feel|take|get|bring","B"]]],
-["2025 · D",[
-[14,"Which item is made from wool?","a pull-over|sandals|a fur coat|a necklace|a T-shirt","A"],
-[15,"A young horse is called a ____.","foal|kid|cub|lamb|fawn","A"],
-[16,"A part of the building which is below the ground level.","shade|basement|gate|garage|fence","B"],
-[17,"Name the means of a transport the front part of which is a cockpit.","train|coach|caravan|aircraft|ferry","D"],
-[18,"A person who steals something from a supermarket is a ____.","mugger|pickpocket|burglar|robber|shoplifter","E"],
-[19,"As soon as Lydia and I met, we knew we were going to get ____ well.","at|round|on|up|in","C"],
-[20,"It was dull and cloudy.","There were a few wintry showers.|It was quite misty.|We had thunder and lightning.|It was very overcast.|There was a bit of drizzle.","D"],
-[21,"It's so easy to get around. Public transport is excellent – it's cheap and ____.","efficient|useful|cosmopolitan|stressful|crowded","A"],
-[22,"In nineteen oh three. ('oh' is used for ...)","the year somebody was born|the score in a tennis watch|a telephone number|the temperature|the result of a football match","A"],
-[26,"A few months ago Ron was arrested by the police, who ____ him of being involved in a robbery at a local post office.","suspected|heard|questioned|charged|convicted","A"],
-[27,"He had been ____ previously of petty crime, but never anything serious.","suspected|heard|questioned|charged|convicted","E"],
-[28,"The police ____ him for several hours.","suspected|heard|questioned|charged|convicted","C"],
-[29,"The police questioned him for several hours and finally ____ him with robbery.","suspected|heard|questioned|charged|convicted","D"],
-[30,"He had to appear in court the following month when his case would be ____.","suspected|heard|questioned|charged|convicted","B"],
-[31,"In which sentence does \"to put on\" mean \"to attach or affix something to another thing\"?","I need to go on a diet. I've been putting on a lot of weight lately.|Jerry put too much fertilizer on his lawn and now has to cut it twice a week.|Eric forgot to put suntan lotion on, and now he's as red as a lobster.|The club put on a show to raise money for the party.|I told the tailor to put the red buttons on the dress he's making for me.","E"],
-[32,"I think he has the flu because you don't usually throw ____ when you have a cold.","on|out|up|off|back","C"],
-[33,"My grandma said, \"If you don't wear an undershirt, you'll ____ down with pneumonia.\"","come|get|put|take|hold","A"]]]
-];
-GR2.forEach(function(s){s[1].forEach(function(q){GRAMR.push(["Vocab "+s[0],q[0],"g",q[1],q[2],q[3]])})});
-var GRAM=GRAMR.map(function(r){var o=r[4].split("|"),a=[];for(var k=0;k<r[5].length;k++)a.push(r[5].charCodeAt(k)-65);
- return {g:1,set:(r[0].length>1?r[0]:"Grammar 2021 · "+r[0]),num:r[1],t:r[2],q:r[3],o:o,a:a,en:(r[0].length>1?r[0]:"Grammar 2021 · "+r[0])+"-"+r[1],mn:a.map(function(i){return String.fromCharCode(65+i)+". "+o[i]}).join(" / "),s:r[3]}});
-var MODES=[["mn-en","Монгол → English"],["en-mn","English → Монгол"],["blank","Өгүүлбэр: хоосон зай"],["mix","🔀 Холимог (3 горим холилдоно)"],["cards","🃏 Карт (цээжлэх)"],["gram","📝 Шалгалтын материал (Grammar, Vocab)"]];
-var COUNTS=[0,10,20];
-var state={mode:"mn-en",sets:{},count:0,reveal:false};
-var $=function(i){return document.getElementById(i)};
-var ALL=[];
-Object.keys(RAW).forEach(function(k){RAW[k].forEach(function(s){var p=s.split("|");ALL.push({en:p[0],mn:p[1],s:p[2],set:k})})});
-Object.keys(RAW).forEach(function(k){state.sets[k]=true});
-GRAM.forEach(function(g){state.sets[g.set]=true});
-
-function chips(id,items,isOn,click){
-  var el=$(id);el.innerHTML="";
-  items.forEach(function(it){
-    var b=document.createElement("button");b.className="chip"+(isOn(it[0])?" on":"");b.textContent=it[1];
-    b.onclick=function(){click(it[0]);render()};el.appendChild(b);
-  });
-}
-function render(){
-  chips("modes",MODES,function(v){return state.mode===v},function(v){state.mode=v});
-  var vis=state.mode==="gram"?gramSets():Object.keys(RAW);
-  chips("sets",vis.map(function(k){return[k,k+" ("+(state.mode==="gram"?GRAM.filter(function(g){return g.set===k}).length:RAW[k].length)+")"]}),function(v){return state.sets[v]},function(v){state.sets[v]=!state.sets[v];if(!vis.some(function(k){return state.sets[k]}))state.sets[v]=true});
-  chips("revs",[[0,"Шалгалт (сонгосны дараа харна)"],[1,"Хариуг шууд харуулах"]],function(v){return !!v===state.reveal},function(v){state.reveal=!!v});
-  chips("counts",COUNTS.map(function(c){return[c,c?String(c):"Бүгд"]}),function(v){return state.count===v},function(v){state.count=v});
-}
-function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
-function blankIt(w){
-  var bm=w.s.match(/\{(.+?)\}/);if(bm)return w.s.replace(bm[0],"_______");
-  var parts=w.en.split(" ");
-  var last=parts[parts.length-1];
-  var stem=last.replace(/(e|y)$/,"");
-  var pre=parts.slice(0,-1).join(" ");
-  var re=new RegExp("\\b"+(pre?pre+" ":"")+stem+"\\w*","i");
-  return re.test(w.s)?w.s.replace(re,"_______"):null;
-}
-var VOICES=[];
-function loadV(){try{VOICES=speechSynthesis.getVoices()||[]}catch(e){}}
-if(window.speechSynthesis){loadV();speechSynthesis.onvoiceschanged=loadV}
-function toast(m){var d=document.getElementById("toast");if(!d){d=document.createElement("div");d.id="toast";d.style.cssText="position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#222;color:#fff;padding:12px 14px;border-radius:10px;font-size:.9rem;z-index:99;text-align:center";document.body.appendChild(d)}d.textContent=m;d.style.display="block";clearTimeout(d._t);d._t=setTimeout(function(){d.style.display="none"},4000)}
-function speak(t){
-  if(!window.speechSynthesis){toast("Энэ хөтөч дуудлагыг дэмжихгүй байна. Chrome хөтчөөр нээнэ үү.");return}
-  try{
-    var s=speechSynthesis;if(s.speaking||s.pending)s.cancel();
-    var u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.9;u.volume=1;
-    var v=VOICES.filter(function(x){return /^en/i.test(x.lang)})[0];if(v){u.voice=v;u.lang=v.lang}
-    u.onerror=function(){toast("Дуудлага тоглохгүй байна. Утасны медиа дууг (volume) болон хөтчийн англи хэлний дууг шалгана уу.")};
-    setTimeout(function(){s.speak(u);if(s.paused)s.resume()},80);
-  }catch(e){toast("Дуудлага тоглуулж чадсангүй.")}
-}
-function spkBtn(t){var b=document.createElement("button");b.className="chip";b.textContent="🔊";b.style.cssText="padding:2px 8px;margin-left:8px;font-size:.9rem";b.onclick=function(e){e.stopPropagation();speak(t)};return b}
-var Q=[],idx=0,score=0,wrongs=[],pool=[],pending=null,picks=[],optsCache=[];
-function start(list){
-  if(state.mode==="gram")return startGram(list);
-  pool=ALL.filter(function(w){return state.sets[w.set]});
-  if(state.mode==="cards"&&!list)return startCards();
-  var src=shuffle(list||pool);
-  if(state.mode==="blank")src=src.filter(function(w){return blankIt(w)});
-  if(!list&&state.count)src=src.slice(0,state.count);
-  if(state.mode==="mix")src=src.map(function(w){var ms=["mn-en","en-mn"];if(blankIt(w))ms.push("blank");return Object.assign({},w,{qm:ms[Math.floor(Math.random()*ms.length)]})});
-  Q=src;idx=0;score=0;wrongs=[];picks=[];optsCache=[];
-  $("setup").classList.add("hid");$("result").classList.add("hid");$("quiz").classList.remove("hid");
-  show();
-}
-function showGram(w){
-  $("prog").textContent=(idx+1)+" / "+Q.length;$("sc").textContent=isT?"✓ "+score:"";
-  $("barfill").style.width=(idx/Q.length*100)+"%";
-  $("next").classList.add("hid");
-  $("label").textContent=w.set+" · "+(w.t==="i"?"Алдаатай хэсгийг ол (A–E)":"Зөв хариултыг сонго");
-  $("prompt").textContent=w.q;$("prompt").style.fontSize="1.05rem";$("sub").textContent="";
-  var box=$("opts");box.innerHTML="";var done=false;
-  var nb=function(){$("next").textContent=idx+1<Q.length?"Дараагийнх":(isT&&!state.reveal?"Дүн харах":"Дуусгах");$("next").classList.remove("hid")};
-  w.o.forEach(function(txt,i){
-    var b=document.createElement("button");b.className="opt";b.textContent=String.fromCharCode(65+i)+". "+txt;
-    b.onclick=function(){
-      if(!isT){picks[idx]=i;var ks=box.children;for(var j=0;j<ks.length;j++)ks[j].classList.remove("sel");b.classList.add("sel");nb();return}
-      if(done)return;done=true;
-      var ok=w.a.indexOf(i)>=0;
-      for(var j=0;j<w.o.length;j++)if(w.a.indexOf(j)>=0)box.children[j].classList.add("ok");
-      if(ok)score++;else{b.classList.add("no");wrongs.push(w)}
-      $("sc").textContent="✓ "+score;nb();
-    };
-    box.appendChild(b);
-  });
-  if(!isT){var pk=picks[idx];if(pk!==undefined){box.children[pk].classList.add("sel");nb()}$("back").classList.toggle("hid",idx===0)}else $("back").classList.add("hid");
-  if(state.reveal&&isT){done=true;$("sc").textContent="";for(var j=0;j<w.o.length;j++)if(w.a.indexOf(j)>=0)box.children[j].classList.add("ok");$("sub").textContent="Зөв: "+w.mn;nb()}
-}
-function startGram(list){
-  var src=list||shuffle(GRAM.filter(function(g){return state.sets[g.set]}));
-  if(!list&&state.count)src=src.slice(0,state.count);
-  Q=src;idx=0;score=0;wrongs=[];picks=[];optsCache=[];
-  $("setup").classList.add("hid");$("result").classList.add("hid");$("quiz").classList.remove("hid");
-  show();
-}
-function show(){
-  pending=null;$("prompt").style.fontSize="";var w=Q[idx],m=w.qm||state.mode;
-  if(w.g)return showGram(w);
-  $("prog").textContent=(idx+1)+" / "+Q.length;$("sc").textContent=isT?"✓ "+score:"";
-  $("barfill").style.width=(idx/Q.length*100)+"%";
-  $("next").classList.add("hid");
-  var lab,pr,sub="",key,getA;
-  if(m==="mn-en"){lab="Англи хэлээр юу вэ?";pr=w.mn;key="en";getA=function(x){return x.en}}
-  else if(m==="en-mn"){lab="Монголоор юу гэсэн үг вэ?";pr=w.en;key="mn";getA=function(x){return x.mn}}
-  else{lab="Хоосон зайг нөх";pr=blankIt(w);sub="Утга: "+w.mn;key="en";getA=function(x){return x.en}}
-  $("label").textContent=lab;$("prompt").textContent=pr;$("sub").textContent=sub;
-  if(m==="en-mn"&&window.speechSynthesis)$("prompt").appendChild(spkBtn(w.en));
-  var others=shuffle(pool.filter(function(x){return x.mn!==w.mn&&x.en!==w.en}));
-  var seen={};seen[getA(w)]=1;var d=[];
-  for(var i=0;i<others.length&&d.length<3;i++){var a=getA(others[i]);if(!seen[a]){seen[a]=1;d.push(others[i])}}
-  var opts=optsCache[idx]||(optsCache[idx]=shuffle([w].concat(d)));
-  var box=$("opts");box.innerHTML="";var done=false;
-  opts.forEach(function(o){
-    var b=document.createElement("button");b.className="opt";b.textContent=getA(o);
-    b.onclick=function(){
-      if(!isT){picks[idx]=o;var ks=box.children;for(var j=0;j<ks.length;j++)ks[j].classList.remove("sel");b.classList.add("sel");$("next").textContent=idx+1<Q.length?"Дараагийнх":"Дуусгах";$("next").classList.remove("hid");return}
-      if(done)return;done=true;
-      var ok=(m==="en-mn")?o.mn===w.mn:(m==="mn-en"?o.mn===w.mn:o.en===w.en);
-      var kids=box.children;
-      for(var i=0;i<kids.length;i++){
-        var oo=opts[i];var good=(m==="blank")?oo.en===w.en:oo.mn===w.mn&&(m==="en-mn"?true:true);
-        if(m==="en-mn")good=oo.mn===w.mn;
-        if(good)kids[i].classList.add("ok");
-      }
-      if(ok)score++;else{b.classList.add("no");wrongs.push(w)}
-      $("sc").textContent=isT?"✓ "+score:"";
-      $("next").textContent=idx+1<Q.length?"Дараагийнх":"Дүн харах";
-      $("next").classList.remove("hid");
-    };
-    box.appendChild(b);
-  });
-  if(!isT){var pk=picks[idx];if(pk){for(var j=0;j<opts.length;j++)if(opts[j]===pk)box.children[j].classList.add("sel");$("next").textContent=idx+1<Q.length?"Дараагийнх":"Дуусгах";$("next").classList.remove("hid")}$("back").classList.toggle("hid",idx===0)}else $("back").classList.add("hid");
-  if(state.reveal&&isT){
-    done=true;$("sc").textContent="";
-    for(var i=0;i<box.children.length;i++){var oo=opts[i];var g=(m==="blank")?oo.en===w.en:oo.mn===w.mn;if(g)box.children[i].classList.add("ok")}
-    $("sub").textContent=(m==="blank"?w.s.replace(/[{}]/g,"")+" — ":"")+w.en+" = "+w.mn;
-    if(window.speechSynthesis)$("sub").appendChild(spkBtn(w.en));
-    $("next").textContent=idx+1<Q.length?"Дараагийнх":"Дуусгах";
-    $("next").classList.remove("hid");
-  }
-}
-$("back").onclick=function(){if(idx>0){idx--;show()}};
-$("next").onclick=function(){if(!isT&&pending){if(pending.ok)score++;else wrongs.push(pending.w);pending=null}idx++;if(idx<Q.length)show();else finish()};
-function finish(){
-  $("again").style.display="";
-  if(!isT){score=0;wrongs=[];Q.forEach(function(w,i){var m=w.qm||state.mode;var pk=picks[i];var ok=w.g?(pk!==undefined&&w.a.indexOf(pk)>=0):(pk&&((m==="blank")?pk.en===w.en:pk.mn===w.mn));if(ok)score++;else wrongs.push(w)});return studentFinish()}
-  if(state.reveal){$("quiz").classList.add("hid");$("result").classList.remove("hid");$("final").textContent="Дууслаа 🎉";$("pct").textContent=Q.length+" үг үзлээ";$("wrong").innerHTML="";$("redo").style.display="none";return}
-  $("quiz").classList.add("hid");$("result").classList.remove("hid");
-  $("final").textContent=score+" / "+Q.length;
-  $("pct").textContent=Math.round(score/Q.length*100)+"% зөв";
-  var el=$("wrong");el.innerHTML="";
-  if(wrongs.length){var h=document.createElement("h2");h.textContent="Алдсан үгс";el.appendChild(h)}
-  wrongs.forEach(function(w){
-    var d=document.createElement("div");d.className="w";
-    d.innerHTML="<b></b> — <span></span><br><small></small>";
-    d.childNodes[0].textContent=w.en;d.childNodes[2].textContent=w.mn;d.childNodes[4].textContent=w.s.replace(/[{}]/g,"");
-    if(window.speechSynthesis&&!w.g)d.appendChild(spkBtn(w.en));
-    el.appendChild(d);
-  });
-  $("redo").style.display=wrongs.length?"block":"none";
-}
-var CL=[],ci=0,flipped=false;
-function startCards(){CL=shuffle(pool);if(state.count)CL=CL.slice(0,state.count);ci=0;flipped=false;$("setup").classList.add("hid");$("cards").classList.remove("hid");drawCard()}
-function drawCard(){var w=CL[ci];$("cprog").textContent=(ci+1)+" / "+CL.length;var f=$("cface");f.innerHTML="";
- var a=document.createElement("div");a.style.fontSize="1.8rem";a.style.fontWeight="700";
- var h=document.createElement("div");h.className="hint";h.style.marginTop="10px";
- if(!flipped){a.textContent=w.en;h.textContent="Дарж эргүүлнэ үү"}else{a.textContent=w.mn;h.textContent=w.s.replace(/[{}]/g,"")}
- f.appendChild(a);f.appendChild(h)}
-$("cface").onclick=$("cflip").onclick=function(){flipped=!flipped;drawCard()};
-$("cnext").onclick=function(){if(ci<CL.length-1){ci++;flipped=false;drawCard()}};
-$("cprev").onclick=function(){if(ci>0){ci--;flipped=false;drawCard()}};
-$("cspk").onclick=function(){speak(CL[ci].en)};
-$("cexit").onclick=function(){$("cards").classList.add("hid");$("setup").classList.remove("hid")};
-$("start").onclick=function(){
-  if(!isT&&state.mode!=="cards"&&!$("nm").value.trim()){$("nm").style.borderColor="var(--no)";$("nm").focus();return}
-  start()};
-$("again").onclick=function(){$("result").classList.add("hid");$("setup").classList.remove("hid")};
-$("redo").onclick=function(){start(wrongs.slice())};
-function hashPw(s){var h1=0xdeadbeef,h2=0x41c6ce57;for(var i=0,c;i<s.length;i++){c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return String(4294967296*(2097151&h2)+(h1>>>0))}
-var TH="8629925018112537";
-// Google Sheets Web app URL-аа энд хашилтын дунд буулгана. Хоосон бол сурагчид код гарна.
-var SHEET_URL="https://script.google.com/macros/s/AKfycbzG4Sj_C_GERKl67YpOEElZgb_LjLdqb02hv7JQ8cTYwxGlWZg10V8Q11eodTyT54ENBA/exec";
-var isT=false,isOwner=false,DB=null,UID=null;
-function applyRole(){$("tlogin").classList.toggle("hid",isOwner||!$("setup").offsetParent&&false);if(isOwner)$("lbox").classList.add("hid");$("prev").classList.toggle("hid",!isOwner);$("prev").textContent=isT?"👩‍🎓 Сурагчийн горимоор туршиж үзэх":"👩‍🏫 Багшийн горим руу буцах";$("namecard").classList.toggle("hid",isT);$("revcard").classList.toggle("hid",!isT);$("tcard").classList.toggle("hid",!isT)}
-function modeName(v){for(var i=0;i<MODES.length;i++)if(MODES[i][0]===v)return MODES[i][1];return v}
-function renderInto(el,list){
-  el.innerHTML="";
-  if(!list.length){el.textContent="Одоогоор дүн алга.";return}
-  list.forEach(function(r){
-    var d=document.createElement("div");d.className="w";
-    var b=document.createElement("b");b.textContent=r.name+(r.cls?" ("+r.cls+")":"")+" — "+r.score+"/"+r.total+" ("+Math.round(r.score/r.total*100)+"%)";
-    var s=document.createElement("small");s.textContent=" · "+(r.title||modeName(r.mode))+" · "+new Date(r.ts).toLocaleString();
-    d.appendChild(b);d.appendChild(s);
-    if(r.wrong&&r.wrong.length){var x=document.createElement("div");x.className="hint";x.textContent="Алдсан: "+r.wrong.join("; ");d.appendChild(x)}
-    el.appendChild(d);
-  });
-}
-function studentFinish(){
-  $("quiz").classList.add("hid");$("result").classList.remove("hid");
-  $("again").style.display="none";$("redo").style.display="none";
-  var name=$("nm").value.trim();
-  $("final").textContent="Дууслаа 🎉";$("pct").textContent="Баярлалаа, "+name;
-  var us=[];Q.forEach(function(w){if(w.set&&us.indexOf(w.set)<0)us.push(w.set)});
-  var r={title:modeName(state.mode)+(us.length?" · "+us.join(", "):""),name:name,cls:$("cls").value.trim(),mode:state.mode,score:score,total:Q.length,pct:Math.round(score/Q.length*100)+"%",wrong:wrongs.map(function(w){return w.en+" = "+w.mn}),ts:Date.now()};
-  var el=$("wrong");el.innerHTML="";
-  var msg=document.createElement("div");msg.className="hint";msg.style.textAlign="center";el.appendChild(msg);
-  function showCode(){
-    msg.textContent="Илгээж чадсангүй. Интернэтээ шалгаад дахин оролдоно уу.";
-    var rb=document.createElement("button");rb.className="go";rb.textContent="Дахин илгээх";
-    rb.onclick=function(){rb.remove();send()};el.appendChild(rb);
-  }
-  function send(){
-  msg.textContent="Илгээж байна...";
-  if(SHEET_URL){fetch(SHEET_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(r)}).then(function(){msg.textContent="Хариулт багшид илгээгдлээ ✅"}).catch(showCode)}
-  else if(DB&&UID){DB.collection("results").doc(UID).set(r).then(function(){msg.textContent="Хариулт багшид илгээгдлээ ✅"}).catch(showCode)}else showCode();
-  }
-  send();
-}
-(async function(){
-  try{
-    if(window.claude&&claude.use){
-      var u=await claude.use("user");
-      isT=u?await u.isOwner():false;
-      try{UID=u?await u.id():null}catch(e){}
-      DB=await claude.use("db");
-      if(isT&&DB){DB.collection("results").orderBy("ts","desc").onSnapshot(function(s){renderInto($("tlist"),s.docs.map(function(d){return d.data()}))},function(){})}
-    }
-  }catch(e){}
-  isOwner=false;applyRole();
-})();
-$("tlogin").onclick=function(){$("lbox").classList.toggle("hid");$("tpw").focus()};
-$("tok").onclick=function(){if(hashPw($("tpw").value)===TH){isT=true;isOwner=true;$("tpw").value="";$("terr").textContent="";applyRole()}else $("terr").textContent="Нууц үг буруу байна."};
-$("mkhash").onclick=function(){var v=$("newpw").value;if(v)$("hashout").textContent='Файлаас var TH="..." мөрийг хайж, хоорондох тоог солино уу: '+hashPw(v)};
-$("prev").onclick=function(){isT=!isT;applyRole()};
-(function(){var r=document.documentElement;
-function cur(){return r.getAttribute("data-theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light")}
-try{var s=localStorage.getItem("theme");if(s)r.setAttribute("data-theme",s)}catch(e){}
-$("theme").onclick=function(){var n=cur()==="dark"?"light":"dark";r.setAttribute("data-theme",n);try{localStorage.setItem("theme",n)}catch(e){}}})();
-function gramSets(){var r=[];GRAM.forEach(function(g){if(r.indexOf(g.set)<0)r.push(g.set)});return r}
-function loadExtra(){
-  if(!SHEET_URL||!window.fetch)return;
-  fetch(SHEET_URL).then(function(r){return r.json()}).then(function(d){
-    (d.words||[]).forEach(function(x){
-      var set=x.set||"Нэмэлт";
-      if(!RAW[set]){RAW[set]=[];state.sets[set]=true}
-      RAW[set].push(x.en+"|"+x.mn+"|"+(x.s||""));
-      ALL.push({en:x.en,mn:x.mn,s:x.s||"",set:set});
+      ALL.push({en:String(x.en),mn:lc(String(x.mn)),s:x.s||"",set:set});
     });
     (d.gram||[]).forEach(function(x){
       var o=x.o||[],a=[];
