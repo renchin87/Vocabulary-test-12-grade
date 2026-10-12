@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Англи хэлний тест</title>
+    <title>Англи хэлний тест ба үгсийн сан</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #f0f2f5; padding: 15px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
@@ -11,7 +11,6 @@
         h1, h2 { text-align: center; color: #1a73e8; margin-bottom: 20px; }
         .hidden { display: none !important; }
         
-        /* Нэвтрэх хэсэг */
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
         .input-group input, .input-group select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
@@ -19,8 +18,9 @@
         .btn:hover { background-color: #1557b0; }
         .btn-secondary { background-color: #5f6368; }
         .btn-secondary:hover { background-color: #444; }
+        .btn-green { background-color: #188038; }
+        .btn-green:hover { background-color: #0d652d; }
         
-        /* Тестийн хэсэг */
         .quiz-header { display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: bold; color: #555; }
         .question-text { font-size: 18px; font-weight: 600; margin-bottom: 15px; color: #202124; line-height: 1.5; }
         .options label { display: block; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: 0.2s; }
@@ -29,7 +29,6 @@
         .options input[type="radio"]:checked + span { font-weight: bold; color: #1a73e8; }
         .selected { border-color: #1a73e8 !important; background-color: #e8f0fe !important; }
         
-        /* Дүнгийн хэсэг */
         .result-box { text-align: center; }
         .score-circle { width: 150px; height: 150px; border-radius: 50%; background: #e8f0fe; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px; border: 5px solid #1a73e8; }
         .score-circle span { font-size: 40px; font-weight: bold; color: #1a73e8; }
@@ -40,13 +39,19 @@
         .review-item .correct { color: #188038; font-weight: bold; }
         .review-item .wrong { color: #d93025; text-decoration: line-through; }
         
-        /* Багшийн хэсэг */
+        .flashcard { background: #fff; border: 2px solid #1a73e8; border-radius: 15px; padding: 40px 20px; text-align: center; min-height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 20px; cursor: pointer; transition: 0.3s; }
+        .flashcard:hover { background: #f8f9fa; }
+        .flashcard .word { font-size: 28px; font-weight: bold; color: #1a73e8; margin-bottom: 10px; }
+        .flashcard .translation { font-size: 22px; color: #188038; display: none; }
+        .flashcard .hint { font-size: 14px; color: #888; margin-top: 10px; }
+        
         .admin-panel { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ddd; }
         .admin-panel h3 { margin-bottom: 10px; color: #d93025; }
-        
-        /* Асуултын сан */
         .question-bank { max-height: 400px; overflow-y: auto; border: 1px solid #eee; padding: 10px; border-radius: 8px; margin-top: 10px; }
         .bank-item { background: #fff; padding: 10px; border-bottom: 1px solid #eee; font-size: 14px; }
+        
+        .mode-buttons { display: flex; gap: 10px; margin-top: 10px; }
+        .mode-buttons .btn { flex: 1; }
     </style>
 </head>
 <body>
@@ -54,22 +59,34 @@
 <div class="container" id="app">
     <!-- Нэвтрэх хэсэг -->
     <div id="loginScreen">
-        <h1>Англи хэлний тест</h1>
+        <h1>Англи хэлний тест ба үгсийн сан</h1>
         <div class="input-group">
             <label>Сурагчийн нэр:</label>
             <input type="text" id="studentName" placeholder="Нэрээ оруулна уу...">
         </div>
         <div class="input-group">
-            <label>Тест сонгох:</label>
-            <select id="testSelect">
-                <option value="2021">2021 оны тест</option>
-                <option value="2022">2022 оны тест</option>
-                <option value="2023">2023 оны тест</option>
-                <option value="2024">2024 оны тест</option>
-                <option value="2025">2025 оны тест</option>
+            <label>Анги бүлэг (Сэдэв):</label>
+            <select id="topicSelect">
+                <option value="all">Бүх сэдэв</option>
+                <option value="economy">8. Эдийн засаг, мөнгө</option>
+                <option value="government">9. Засаглал, хууль, улс төр</option>
+                <option value="travel">10. Аялал, газар зүй</option>
+                <option value="emotions">11. Сэтгэл хөдлөл, зан төлөв</option>
+                <option value="adjectives">12. Түгээмэл тэмдэг нэр</option>
+                <option value="academic">13. Академик, эссений үйл үг</option>
+                <option value="health">4. Эрүүл мэнд</option>
             </select>
         </div>
-        <button class="btn" onclick="startQuiz()">Тест эхлэх</button>
+        <div class="input-group">
+            <label>Горим сонгох:</label>
+            <select id="modeSelect">
+                <option value="test">Тест (Оноотой)</option>
+                <option value="mn2en">Монголоос → Англи</option>
+                <option value="en2mn">Англи → Монгол</option>
+                <option value="flashcard">Үг цээжлэх карт</option>
+            </select>
+        </div>
+        <button class="btn" onclick="startSession()">Эхлэх</button>
         <button class="btn btn-secondary" onclick="showAdminLogin()">Багшийн хэсэг</button>
     </div>
 
@@ -88,9 +105,9 @@
     <div id="adminPanelScreen" class="hidden">
         <h2>Багшийн самбар</h2>
         <div class="admin-panel">
-            <h3>Асуултын сан</h3>
-            <p>Нийт асуулт: <span id="totalQuestions">0</span></p>
-            <div class="question-bank" id="questionBankList"></div>
+            <h3>Үгийн сан</h3>
+            <p>Нийт үг: <span id="totalWords">0</span></p>
+            <div class="question-bank" id="wordBankList"></div>
         </div>
         <button class="btn btn-secondary" onclick="showLogin()">Гарах</button>
     </div>
@@ -106,10 +123,26 @@
         <button class="btn" id="nextBtn" onclick="nextQuestion()">Дараах</button>
     </div>
 
+    <!-- Картын хэсэг -->
+    <div id="flashcardScreen" class="hidden">
+        <div class="quiz-header">
+            <span id="cardProgressText">Карт 1/10</span>
+        </div>
+        <div class="flashcard" id="flashcard" onclick="flipCard()">
+            <div class="word" id="cardWord"></div>
+            <div class="translation" id="cardTranslation"></div>
+            <div class="hint">Дарж хариултыг харах</div>
+        </div>
+        <div class="mode-buttons">
+            <button class="btn btn-green" onclick="nextCard()">Дараах карт</button>
+            <button class="btn btn-secondary" onclick="location.reload()">Дуусгах</button>
+        </div>
+    </div>
+
     <!-- Дүнгийн хэсэг -->
     <div id="resultScreen" class="hidden">
         <div class="result-box">
-            <h2>Тест дууслаа!</h2>
+            <h2>Дууслаа!</h2>
             <div class="score-circle">
                 <span id="finalScore">0</span>
             </div>
@@ -122,118 +155,158 @@
 
 <script>
     // ==========================================
-    // 1. АСУУЛТЫН САН (Энд та өөрөө асуултуудаа оруулна)
+    // 1. ҮГСИЙН САН (Та энд үгсээ нэмж оруулна)
     // ==========================================
-    // Бүтэц: { year: "2021", question: "Асуулт", options: ["A", "B", "C", "D", "E"], correct: 0 }
-    // correct: 0 нь A, 1 нь B, 2 нь C, 3 нь D, 4 нь E гэсэн үг.
+    // Бүтэц: { topic: "economy", en: "economy", mn: "эдийн засаг", example: "The country's economy is growing." }
     
-    const allQuestions = [
-        // --- 2021 ОНЫ ТЕСТҮҮД ---
-        { year: "2021", question: "We can travel to Brighton ______ by bus or by train; the fare is almost the same.", options: ["both", "none", "either", "neither", "all"], correct: 2 },
-        { year: "2021", question: "The more he exercises, ______ he will be.", options: ["healthiest", "the healthier", "healthier", "the healthiest", "healthy"], correct: 1 },
-        { year: "2021", question: "Alex is very ______ of his younger sister.", options: ["protect", "protection", "protected", "protective", "protector"], correct: 3 },
-        { year: "2021", question: "When you go to the town, could you please buy a ______ of jam for me?", options: ["bar", "can", "bag", "carton", "jar"], correct: 4 },
-        { year: "2021", question: "My boss ______ this language course to me.", options: ["influenced", "persuaded", "recommended", "criticized", "maintained"], correct: 2 },
-        { year: "2021", question: "The Professor just wanted to ______ the importance of learning foreign languages.", options: ["grasp", "integrate", "damage", "emphasize", "extend"], correct: 3 },
-        { year: "2021", question: "The forecast is for dry, sunny weather with no ______ expected.", options: ["degradation", "desertification", "permission", "protection", "precipitation"], correct: 4 },
-        { year: "2021", question: "Millions of birds migrate to the south every year. It is an annual ______.", options: ["celebration", "motivation", "perception", "phenomenon", "behavior"], correct: 3 },
-        { year: "2021", question: "Synthetic fabrics are made from ______ substances, not natural ones.", options: ["artificial", "organic", "unique", "modern", "combined"], correct: 0 },
-        { year: "2021", question: "Many foreign ______ attended the opening ceremony.", options: ["scavengers", "failures", "abilities", "attempts", "dignitaries"], correct: 4 },
-        { year: "2021", question: "If I could do it ______ again, I'd do it differently.", options: ["in", "without", "away", "over", "with"], correct: 3 },
-        { year: "2021", question: "After the thieves are captured, the stolen items will be turned ______ to the rightful owners.", options: ["in", "away", "over", "against", "down"], correct: 2 },
-        { year: "2021", question: "Be careful walking in the woods, there are a lot of branches sticking ______.", options: ["to", "at", "by", "out", "with"], correct: 3 },
-        { year: "2021", question: "The man was desperate to get rid of his car even though it was only one year old. So I was able to buy it for a song.", options: ["His car was expensive.", "He sang a song in his car.", "He exchanged his car for a different one.", "He bought the car very cheaply.", "He bought a CD with his favorite songs."], correct: 3 },
-        { year: "2021", question: "I only got the message by word of mouth.", options: ["He read the message from the newspaper.", "The message was passed by his mom.", "He opened his mouth while he was reading the message.", "The message passed from person to person.", "He was only mouthing the message."], correct: 3 },
-        { year: "2021", question: "I was up in the air about selling my house and moving into a bigger one.", options: ["He was excited about moving into a big house.", "He was in the air when his wife was moving her house.", "He always airs his house.", "He sold his old house and moved into a big one.", "He left the windows open to let the room air a bit."], correct: 0 },
+    const allWords = [
+        // 8. Эдийн засаг, мөнгө (Economy & Money)
+        { topic: "economy", en: "economy", mn: "эдийн засаг", example: "The country's economy is growing steadily." },
+        { topic: "economy", en: "budget", mn: "төсөв", example: "The family made a monthly budget." },
+        { topic: "economy", en: "invest", mn: "хөрөнгө оруулах", example: "He decided to invest in property." },
+        { topic: "economy", en: "profit", mn: "ашиг", example: "The company made a large profit last year." },
+        { topic: "economy", en: "loss", mn: "алдагдал", example: "The business suffered a financial loss." },
+        { topic: "economy", en: "afford", mn: "төлж чадах", example: "They can't afford a new car right now." },
+        { topic: "economy", en: "expense", mn: "зардал", example: "Travel expenses are covered by the company." },
+        { topic: "economy", en: "income", mn: "орлого", example: "Her main income comes from teaching." },
+        { topic: "economy", en: "debt", mn: "өр", example: "He is trying to pay off his debt." },
+        { topic: "economy", en: "loan", mn: "зээл", example: "She took a loan to start her business." },
+        { topic: "economy", en: "currency", mn: "мөнгөн тэмдэгт", example: "The dollar is a strong currency." },
+        { topic: "economy", en: "inflation", mn: "инфляци", example: "Inflation makes goods more expensive." },
+        { topic: "economy", en: "trade", mn: "худалдаа", example: "The two countries increased their trade." },
+        { topic: "economy", en: "market", mn: "зах зээл", example: "Prices are set by the market." },
+        { topic: "economy", en: "demand", mn: "эрэлт", example: "Demand for electric cars is rising." },
+        { topic: "economy", en: "supply", mn: "нийлүүлэлт", example: "The supply of oil affects its price." },
+        { topic: "economy", en: "consumer", mn: "хэрэглэгч", example: "Consumers want cheaper products." },
+        { topic: "economy", en: "purchase", mn: "худалдан авах", example: "She made an expensive purchase." },
+        { topic: "economy", en: "wealth", mn: "баялаг", example: "The region is famous for its natural wealth." },
+        { topic: "economy", en: "poverty", mn: "ядуурал", example: "Economic growth helps reduce poverty." },
+        { topic: "economy", en: "financial", mn: "санхүүгийн", example: "The company faced financial difficulties." },
+        { topic: "economy", en: "bank", mn: "банк", example: "She deposited the money in the bank." },
+        { topic: "economy", en: "value", mn: "үнэ цэн", example: "The value of the house increased." },
+        { topic: "economy", en: "fund", mn: "сан, санхүүжүүлэх", example: "The government funds the project." },
+        { topic: "economy", en: "revenue", mn: "орлого, ашиг", example: "The company's revenue doubled this year." },
+        { topic: "economy", en: "tax", mn: "татвар", example: "Everyone must pay income tax." },
+        { topic: "economy", en: "cost", mn: "өртөг, зардал", example: "The cost of living has increased." },
+        { topic: "economy", en: "price", mn: "үнэ", example: "The price of fuel keeps rising." },
+        { topic: "economy", en: "economic", mn: "эдийн засгийн", example: "Economic reforms boosted growth." },
+        { topic: "economy", en: "save", mn: "хуримтлах, хадгалах", example: "It's wise to save money for the future." },
+        { topic: "economy", en: "spend", mn: "зарцуулах", example: "They spend too much on entertainment." },
+        { topic: "economy", en: "wealthy", mn: "баян, чинээлэг", example: "He comes from a wealthy family." },
+        { topic: "economy", en: "recession", mn: "уналт, хямрал", example: "Many people lost jobs during the recession." },
+        { topic: "economy", en: "export", mn: "экспорт", example: "The country exports minerals abroad." },
+        { topic: "economy", en: "import", mn: "импорт", example: "They import electronics from Asia." },
+        { topic: "economy", en: "earnings", mn: "олсон орлого", example: "The firm reported strong earnings." },
+        { topic: "economy", en: "bankrupt", mn: "дампуурсан", example: "The company went bankrupt last year." },
+        { topic: "economy", en: "insurance", mn: "даатгал", example: "Health insurance covers medical costs." },
+        { topic: "economy", en: "investment", mn: "хөрөнгө оруулалт", example: "The investment produced good returns." },
+        { topic: "economy", en: "prosper", mn: "цэцэглэн хөгжих", example: "The business began to prosper." },
 
-        // --- 2022 ОНЫ ТЕСТҮҮД ---
-        { year: "2022", question: "Neither Jim nor Tom passed the exam.", options: ["Both", "Either", "All", "None", "Neither"], correct: 4 },
-        { year: "2022", question: "The more he looked at her, ______ embarrassed she was.", options: ["the more", "the most", "more", "mostly", "much"], correct: 0 },
-        { year: "2022", question: "John is ______ and needs help when asked to sign papers.", options: ["literate", "literally", "literacy", "illiteracy", "illiterate"], correct: 4 },
-        { year: "2022", question: "We must get a ______ of flour, and some eggs and apples, so we can make an apple pie for dessert.", options: ["box", "can", "tube", "bag", "bar"], correct: 3 },
-        { year: "2022", question: "Children ______ their necks to see who their mother was talking to.", options: ["nodded", "spilled", "fluttered", "ignored", "craned"], correct: 4 },
-        { year: "2022", question: "Teaching English in a lively interesting way increases students' ______ to learn.", options: ["volunteering", "tolerance", "motivation", "diversity", "automation"], correct: 2 },
-        { year: "2022", question: "Regular exercise is good for your body and brain. It ______ your blood with oxygen.", options: ["stores", "enriches", "influences", "processes", "produces"], correct: 1 },
-        { year: "2022", question: "My ______ is that you're not getting enough work done.", options: ["concentration", "occupation", "concern", "action", "attachment"], correct: 2 },
-        { year: "2022", question: "The heavy rain flooded the field, and the ground was muddy. Under these ______ the kids couldn't play.", options: ["willingness", "circumstances", "decisions", "basements", "cells"], correct: 1 },
-        { year: "2022", question: "The two countries have ______ close ties for centuries.", options: ["confused", "distracted", "maintained", "debated", "ignored"], correct: 2 },
-        { year: "2022", question: "Because of some mistakes in my test, my teacher made me do it ______.", options: ["without", "over", "away", "in", "with"], correct: 1 },
-        { year: "2022", question: "It's getting late, I'm turning ______.", options: ["in", "around", "into", "up", "off"], correct: 0 },
-        { year: "2022", question: "Chingee is nearly eight feet tall and has red hair, so she really sticks ______ in a crowd.", options: ["out", "down", "around", "with", "to"], correct: 0 },
-        { year: "2022", question: "Jake and I lost our jobs yesterday. Now we are in the same boat.", options: ["They are in the broken boat.", "They have a good situation.", "They are in the same bad situation.", "They are looking for a job.", "They are travelling by boat."], correct: 2 },
-        { year: "2022", question: "Chingee got it in the neck because she forgot to turn off the car light last night.", options: ["The long drive hurt her neck.", "She was punished for the damage to the car battery.", "She forgot to turn off the car light.", "Her shirt was open at the neck.", "She was punished for the damage to the car light."], correct: 1 },
-        { year: "2022", question: "My girlfriend always acts as if she were born yesterday.", options: ["She was born yesterday.", "Her boyfriend doesn't know what she really wants.", "She believes that the best way to learn is by experience.", "She is naive because she doesn't have much experience in life.", "His girlfriend is very thoughtful."], correct: 3 },
+        // 9. Засаглал, хууль, улс төр (Government, Law & Politics)
+        { topic: "government", en: "government", mn: "засгийн газар", example: "The government passed a new law." },
+        { topic: "government", en: "policy", mn: "бодлого", example: "The new policy supports small businesses." },
+        { topic: "government", en: "law", mn: "хууль", example: "Everyone must obey the law." },
+        { topic: "government", en: "citizen", mn: "иргэн", example: "Citizens have the right to vote." },
+        { topic: "government", en: "election", mn: "сонгууль", example: "The election takes place every four years." },
+        { topic: "government", en: "vote", mn: "санал өгөх", example: "She voted in the presidential election." },
+        { topic: "government", en: "democracy", mn: "ардчилал", example: "Democracy gives power to the people." },
+        { topic: "government", en: "rights", mn: "эрх", example: "Human rights must be protected." },
+        { topic: "government", en: "justice", mn: "шударга ёс", example: "The court seeks justice for all." },
+        { topic: "government", en: "parliament", mn: "парламент", example: "Parliament debated the new bill." },
+        { topic: "government", en: "authority", mn: "эрх мэдэл, эрх бүхий байгууллага", example: "The local authority manages the roads." },
+        { topic: "government", en: "regulation", mn: "журам, зохицуулалт", example: "New regulations control air pollution." },
+        { topic: "government", en: "legal", mn: "хуулийн, хууль ёсны", example: "The contract is a legal document." },
+        { topic: "government", en: "illegal", mn: "хууль бус", example: "Selling these goods is illegal." },
+        { topic: "government", en: "crime", mn: "гэмт хэрэг", example: "The police are investigating the crime." },
+        { topic: "government", en: "punish", mn: "шийтгэх", example: "The law punishes dangerous driving." },
+        { topic: "government", en: "court", mn: "шүүх", example: "The case went to court last week." },
+        { topic: "government", en: "trial", mn: "шүүх хурал", example: "He is on trial for theft." },
+        { topic: "government", en: "evidence", mn: "нотлох баримт", example: "The lawyer presented new evidence." },
+        { topic: "government", en: "witness", mn: "гэрч", example: "The witness described what she saw." },
+        { topic: "government", en: "freedom", mn: "эрх чөлөө", example: "Freedom of speech is a basic right." },
+        { topic: "government", en: "corruption", mn: "авлига", example: "The government is fighting corruption." },
+        { topic: "government", en: "reform", mn: "шинэчлэл", example: "The country needs economic reform." },
+        { topic: "government", en: "official", mn: "албан ёсны, түшмэл", example: "An official announced the results." },
+        { topic: "government", en: "campaign", mn: "кампанит ажил", example: "The candidate ran an honest campaign." },
+        { topic: "government", en: "debate", mn: "мэтгэлцээн", example: "The two leaders held a public debate." },
+        { topic: "government", en: "protest", mn: "жагсаал, эсэргүүцэл", example: "People protested against the new tax." },
+        { topic: "government", en: "constitution", mn: "үндсэн хууль", example: "The constitution protects citizens' rights." },
+        { topic: "government", en: "politician", mn: "улс төрч", example: "The politician promised to lower taxes." },
+        { topic: "government", en: "enforce", mn: "хэрэгжүүлэх, мөрдүүлэх", example: "The police enforce traffic laws." },
 
-        // --- 2023 ОНЫ ТЕСТҮҮД ---
-        { year: "2023", question: "Choose the correct word and phrase to complete sentences. You need to acquire ______ in social work.", options: ["operation", "application", "necessity", "qualification", "cooperation"], correct: 3 },
-        { year: "2023", question: "Roads should have a ______ so that people can cross the road safely.", options: ["dead end", "intersection", "zebra crossing", "one-way street", "lane"], correct: 2 },
-        { year: "2023", question: "The level of junk food ______ was illustrated by statistics.", options: ["consideration", "compulsion", "consumption", "combination", "compassion"], correct: 2 },
-        { year: "2023", question: "When fossil fuels burn, different substances are ______ into the air.", options: ["accelerated", "tapped", "trapped", "supplied", "released"], correct: 4 },
-        { year: "2023", question: "Jack has already ______ a very good reputation as a talented prosecutor.", options: ["achieved", "won", "done", "made", "gained"], correct: 4 },
-        { year: "2023", question: "The cave of the Apocalypse in Greece is in the list of UNESCO world ______ sites.", options: ["heritage", "representation", "legacy", "tradition", "masterpiece"], correct: 0 },
-        { year: "2023", question: "Always ______ your files and any documents you're working on.", options: ["back up", "hack into", "log in", "click on", "crash on"], correct: 0 },
-        { year: "2023", question: "Anna: You must come and visit us some time. Don't keep putting it off. Tom: Yes, I'll come and see you in the not too distant future.", options: ["promise", "demand", "offer", "prediction", "appointment"], correct: 0 },
-        { year: "2023", question: "Sharon: Who is the girl? Do you know her? John: She must be Alice's daughter. She looks just like her.", options: ["criticism", "complaint", "compliment", "assumption", "suggestion"], correct: 3 },
-        { year: "2023", question: "Choose the most suitable word to complete each collocation fork. a valuable / a rich / a reliable ______", options: ["Source", "Determination", "Enthusiasm", "Guarantee"], correct: 0 },
-        { year: "2023", question: "Choose the most suitable word to complete each collocation fork. ______ knowledge / Wisdom / Information", options: ["To earn", "To conduct", "To instruct", "To impart", "To endure"], correct: 3 },
-        { year: "2023", question: "I struggle to speak for a long time and say 'Err' a lot when I ______.", options: ["run out of ideas", "avoid pronouncing words", "find my spoken fluency", "provide feedback on the grammatical accuracy", "have a significant impact"], correct: 0 },
-        { year: "2023", question: "Choose the most possible solution to flood.", options: ["stonework", "wind turbines", "dams and canals", "tunnels and subways", "sea barrier"], correct: 2 },
-        { year: "2023", question: "He was late and made up some cock-and-bull story about losing his car keys.", options: ["He was involved in illegal activities.", "Other people thought he was true.", "He told a fake story.", "He told a story about animals.", "He was upset about being late."], correct: 2 },
-        { year: "2023", question: "The computer he gave you isn't the best one in the world, but you shouldn't look a gift horse in the mouth.", options: ["The computer is a bad gift.", "You should not complain about the gift given to you.", "You should give back the computer to him.", "You never receive a gift you don't like.", "Receiving a horse as a gift is his hobby."], correct: 1 },
+        // 10. Аялал, газар зүй (Travel & Places)
+        { topic: "travel", en: "destination", mn: "очих газар", example: "Paris is a popular travel destination." },
+        { topic: "travel", en: "journey", mn: "аялал, зам", example: "The journey took ten hours by train." },
+        { topic: "travel", en: "tourist", mn: "жуулчин", example: "Thousands of tourists visit the temple." },
+        { topic: "travel", en: "accommodation", mn: "байр, буудал", example: "The hotel offers comfortable accommodation." },
+        { topic: "travel", en: "reservation", mn: "захиалга", example: "I made a reservation at the restaurant." },
+        { topic: "travel", en: "passport", mn: "гадаад паспорт", example: "Check that your passport is valid." },
+        { topic: "travel", en: "luggage", mn: "тээш, ачаа", example: "She packed her luggage the night before." },
+        { topic: "travel", en: "depart", mn: "хөдлөх, гарах", example: "The flight departs at seven in the morning." },
+        { topic: "travel", en: "arrive", mn: "хүрэлцэн ирэх", example: "We arrived late because of the traffic." },
+        { topic: "travel", en: "explore", mn: "судлан үзэх", example: "They love to explore new cities." },
+        { topic: "travel", en: "abroad", mn: "гадаадад", example: "She studied abroad for two years." },
+        { topic: "travel", en: "scenery", mn: "байгалийн үзэмж", example: "The mountain scenery was beautiful." },
+        { topic: "travel", en: "adventure", mn: "адал явдал", example: "The trip was a real adventure." },
+        { topic: "travel", en: "region", mn: "бүс нутаг", example: "This region is famous for its lakes." },
+        { topic: "travel", en: "border", mn: "хил", example: "They crossed the border by car." },
+        { topic: "travel", en: "capital", mn: "нийслэл", example: "Ulaanbaatar is the capital of Mongolia." },
+        { topic: "travel", en: "continent", mn: "тив", example: "Asia is the largest continent." },
+        { topic: "travel", en: "landmark", mn: "дурсгалт газар", example: "The tower is a famous landmark." },
+        { topic: "travel", en: "route", mn: "маршрут, зам", example: "We chose the shortest route home." },
+        { topic: "travel", en: "distance", mn: "зай", example: "The distance between the cities is 300 km." },
+        { topic: "travel", en: "tour", mn: "аялал, тур", example: "They booked a guided tour of the city." },
+        { topic: "travel", en: "remote", mn: "алслагдсан", example: "The village is in a remote area." },
+        { topic: "travel", en: "foreign", mn: "гадаадын", example: "She enjoys learning about foreign cultures." },
+        { topic: "travel", en: "nearby", mn: "ойролцоо", example: "There is a park nearby." },
+        { topic: "travel", en: "souvenir", mn: "бэлэг дурсгал", example: "He bought a souvenir from the market." },
+        { topic: "travel", en: "guide", mn: "хөтөч", example: "The guide showed us the old town." },
+        { topic: "travel", en: "flight", mn: "нислэг", example: "Our flight was delayed by an hour." },
+        { topic: "travel", en: "local", mn: "нутгийн, орон нутгийн", example: "We tried some delicious local food." },
 
-        // --- 2024 ОНЫ ТЕСТҮҮД ---
-        { year: "2024", question: "I've got great ______ on my assignment from the teacher who remarked how I could improve on it.", options: ["debate", "portfolio", "feedback", "grant", "finance"], correct: 2 },
-        { year: "2024", question: "He lied to me and to make matters worse, he didn't ______ at all.", options: ["accept", "thank", "risk", "admit", "apologize"], correct: 4 },
-        { year: "2024", question: "The particles that make up plasmas have electric charges, so plasmas can ______ electricity.", options: ["dissolve", "attract", "affect", "insulate", "conduct"], correct: 4 },
-        { year: "2024", question: "Many groups are working to reduce ______ to protect pastureland in the Gobi region.", options: ["soil erosion", "hazards", "blizzard", "drought", "gale"], correct: 0 },
-        { year: "2024", question: "In the tournament, Hannah ______ all her opponents and won the gold medal.", options: ["beat", "gained", "had", "granted", "rewarded"], correct: 0 },
-        { year: "2024", question: "The little boy's eyes ______ when he saw his daddy.", options: ["flowed", "shone", "lightened", "lit up", "darkened"], correct: 3 },
-        { year: "2024", question: "I was working on my presentation and suddenly the screen ______ black.", options: ["installed", "crashed", "went", "loaded", "turned"], correct: 2 },
-        { year: "2024", question: "Alice: You were late for the meeting this morning! Tom: I feel sorry for being tardy. The alarm didn't go off.", options: ["denying", "refusing", "making an excuse", "requesting", "regretting"], correct: 2 },
-        { year: "2024", question: "Anna: Would you like some black coffee? John: I can't drink bitter coffee.", options: ["opinion", "refusal", "offer", "confusion", "excuse"], correct: 1 },
-        { year: "2024", question: "Choose the most suitable word to complete each collocation fork. go on a / a balanced / sensible ______", options: ["meal", "solution", "plan", "diet", "date"], correct: 3 },
-        { year: "2024", question: "Choose the most suitable word to complete each collocation fork. ______ tears / laughter / song", options: ["to let out", "to make", "to burst into", "to bump into", "to cry over"], correct: 2 },
-        { year: "2024", question: "I recognize a few words in the passage, therefore, I ______.", options: ["am not eager to learn new words", "keep my mouth shut like a fish", "find it easy to understand the whole content", "never look up a new word in a dictionary", "try hard to catch the meaning of every word"], correct: 4 },
-        { year: "2024", question: "Choose the most possible solution to air pollution.", options: ["temporary shelters", "dump sites", "organic products", "hybrid cars", "exhaust fumes"], correct: 3 },
-        { year: "2024", question: "Finally the department's solution to the problem hit the nail on the head.", options: ["The staff's solution was not bad.", "The accident was caused by the failures.", "The staff did exactly right.", "The staff's act was quite smart.", "The staff hit the box of nails"], correct: 2 },
-        { year: "2024", question: "The police will arrest the suspect by hook or by crook.", options: ["They will use any method possible.", "They will use technological devices.", "They will mobilize all units.", "They will investigate all offenders.", "They will be on duty at check-points."], correct: 0 },
+        // 11. Сэтгэл хөдлөл, зан төлөв (Emotions & Personality)
+        { topic: "emotions", en: "confident", mn: "өөртөө итгэлтэй", example: "She felt confident before the exam." },
+        { topic: "emotions", en: "anxious", mn: "түгшүүртэй", example: "He was anxious about the results." },
+        { topic: "emotions", en: "generous", mn: "өгөөмөр", example: "She is generous with her time and money." },
+        { topic: "emotions", en: "honest", mn: "шударга", example: "An honest person always tells the truth." },
+        { topic: "emotions", en: "patient", mn: "тэвчээртэй", example: "A good teacher must be patient." },
+        { topic: "emotions", en: "curious", mn: "сониуч", example: "Children are naturally curious." },
+        { topic: "emotions", en: "grateful", mn: "талархалтай", example: "I am grateful for your help." },
+        { topic: "emotions", en: "ambitious", mn: "тэмүүлэлтэй", example: "She is ambitious and determined." },
+        { topic: "emotions", en: "polite", mn: "эелдэг", example: "He is always polite to strangers." },
+        { topic: "emotions", en: "selfish", mn: "хувиа хичээсэн", example: "It was selfish to take all the food." },
+        { topic: "emotions", en: "reliable", mn: "найдвартай", example: "He is a reliable friend." },
+        { topic: "emotions", en: "cheerful", mn: "хөгжилтэй", example: "She has a cheerful personality." },
+        { topic: "emotions", en: "nervous", mn: "сандран", example: "I felt nervous before the interview." },
+        { topic: "emotions", en: "proud", mn: "бахархсан", example: "Her parents were proud of her success." },
+        { topic: "emotions", en: "shy", mn: "ичимхий", example: "The shy boy rarely spoke in class." },
+        { topic: "emotions", en: "brave", mn: "зоригтой", example: "The brave firefighter saved the child." },
+        { topic: "emotions", en: "jealous", mn: "атаархсан", example: "He was jealous of his brother's success." },
+        { topic: "emotions", en: "calm", mn: "тайван", example: "Try to stay calm during the test." },
+        { topic: "emotions", en: "stubborn", mn: "зөрүүд", example: "He is too stubborn to change his mind." },
+        { topic: "emotions", en: "sympathy", mn: "энэрэл, өрөвдөх сэтгэл", example: "She showed sympathy for the victims." },
+        { topic: "emotions", en: "frustrated", mn: "цухалдсан, уурласан", example: "He felt frustrated by the delay." },
+        { topic: "emotions", en: "optimistic", mn: "өөдрөг", example: "She is optimistic about the future." },
+        { topic: "emotions", en: "pessimistic", mn: "гутранги", example: "He tends to be pessimistic about everything." },
+        { topic: "emotions", en: "sensitive", mn: "мэдрэмтгий", example: "She is sensitive to criticism." },
+        { topic: "emotions", en: "enthusiastic", mn: "урам зоригтой", example: "The students were enthusiastic about the trip." },
+        { topic: "emotions", en: "disappointed", mn: "урам хугарсан", example: "He was disappointed with his grade." },
+        { topic: "emotions", en: "loyal", mn: "үнэнч", example: "A loyal friend supports you always." },
+        { topic: "emotions", en: "arrogant", mn: "их зантай, бардам", example: "Nobody likes his arrogant attitude." },
+        { topic: "emotions", en: "gentle", mn: "зөөлөн, эелдэг", example: "She has a gentle and kind nature." },
+        { topic: "emotions", en: "determined", mn: "шимдэгтэй", example: "She was determined to win." },
+        { topic: "emotions", en: "mood", mn: "сэтгэлийн байдал", example: "He was in a good mood today." },
+        { topic: "emotions", en: "emotion", mn: "сэтгэл хөдлөл", example: "She struggled to hide her emotions." },
 
-        // --- 2025 ОНЫ ТЕСТҮҮД ---
-        { year: "2025", question: "The rain won't last long; it's only a ______.", options: ["downpour", "breeze", "hail", "frost", "shower"], correct: 4 },
-        { year: "2025", question: "______ is a person whose job is riding horses in races.", options: ["Swimmer", "Fencer", "Runner", "Jockey", "Golfer"], correct: 3 },
-        { year: "2025", question: "The theory of ______ studies the nature and origin of the universe.", options: ["biology", "physics", "cosmology", "chemistry", "medicine"], correct: 2 },
-        { year: "2025", question: "The ability of zoom ______ is particularly useful when you are working on detailed diagrams.", options: ["out", "in", "up", "on", "over"], correct: 1 },
-        { year: "2025", question: "A (an) ______ is a tall bird with long thin legs and a long neck.", options: ["move(d)", "ostrich", "lever", "crane(d)", "stretch(ed)"], correct: 1 },
-        { year: "2025", question: "Finally, the house was put back onto the truck by ______.", options: ["move(d)", "ostrich", "lever", "crane(d)", "stretch(ed)"], correct: 3 },
-        { year: "2025", question: "The boy ______ his neck to get the first glimpse of a celebrity.", options: ["move(d)", "ostrich", "lever", "crane(d)", "stretch(ed)"], correct: 4 },
-        { year: "2025", question: "What will you take with you when you reach the mountain's peak?", options: ["climbing gear", "hiking boots", "a fencing sword", "bowling pins", "a mountain bike"], correct: 0 },
-        { year: "2025", question: "What expression is used for making others experience pain?", options: ["to relieve pain", "to feel pain", "to ease pain", "to inflict pain", "to experience pain"], correct: 3 },
-        { year: "2025", question: "Choose the correct prefix and suffix. A (an) ______ ageing substance / viral drug / depressant treatment", options: ["non-", "pro-", "anti-", "pre-", "ante-"], correct: 2 },
-        { year: "2025", question: "Choose the correct prefix and suffix. History (______) novels", options: ["-ic", "-ical", "-ian", "-ous", "-ish"], correct: 1 },
-        { year: "2025", question: "Tonya spends a lot of money ______ fancy clothes.", options: ["for", "over", "in", "on", "onto"], correct: 3 },
-        { year: "2025", question: "The answer was ______ the tip of my tongue, but I just couldn't remember it.", options: ["with", "at", "in", "from", "on"], correct: 4 },
-        { year: "2025", question: "It really got Mr Robert's goat when he had to wait two hours to get his plane tickets.", options: ["He was annoyed at the long delay.", "He was angry because he couldn't get the ticket.", "He didn't care about the long line.", "He was frustrated because he was late for the flight.", "He didn't mind the long delay."], correct: 0 },
-        { year: "2025", question: "He really caught it in the neck because he didn't put the fire out.", options: ["He was captured.", "He was praised.", "He was scolded.", "He was disgraced.", "He was rewarded."], correct: 2 },
-        { year: "2025", question: "I would love to be a good ______, but my eyesight isn't very good.", options: ["gymnast", "archer", "high jumper", "weight lifter", "canoeist"], correct: 1 },
-        { year: "2025", question: "It was absolutely pouring down yesterday. It was a real ______.", options: ["hurricane", "shower", "gale", "downpour", "blizzard"], correct: 3 },
-        { year: "2025", question: "______ studies the rocks and similar substances that make up the Earth's surface.", options: ["Geometry", "Geography", "Geology", "Archaeology", "Astrology"], correct: 2 },
-        { year: "2025", question: "For security reasons, always log ______ when you leave your computer unattended for any period of time.", options: ["out", "in", "on", "for", "up"], correct: 0 },
-        { year: "2025", question: "Please, print your name and address in ______ letters.", options: ["block", "capital", "clog", "bulk", "fill"], correct: 1 },
-        { year: "2025", question: "My boyfriend and I live on the same ______.", options: ["block", "capital", "clog", "bulk", "fill"], correct: 0 },
-        { year: "2025", question: "Every autumn dead leaves ______ the drains.", options: ["block", "capital", "clog", "bulk", "fill"], correct: 2 },
-        { year: "2025", question: "What will you wear when you go hiking?", options: ["a walking stick", "climbing boots", "walking boots", "camping gear", "a surfing board"], correct: 2 },
-        { year: "2025", question: "What expression is used for making pain go away?", options: ["to inflict pain", "to suffer pain", "to cause pain", "to complain of pain", "to soothe pain"], correct: 4 },
-        { year: "2025", question: "Choose the correct prefix and suffix. A (an) ______ war Europe / traumatic stress disorder / industrial age", options: ["com-", "sub-", "inter-", "trans-", "post-"], correct: 4 },
-        { year: "2025", question: "Choose the correct prefix and suffix. A persist (______) learner", options: ["-ent", "-ant", "-ence", "-ance", "-ible"], correct: 0 },
-        { year: "2025", question: "My uncle suffers ______ a type of diabetes.", options: ["about", "of", "with", "off", "from"], correct: 4 },
-        { year: "2025", question: "I asked our neighbors to keep an eye ______ the house while we were away.", options: ["for", "over", "at", "on", "with"], correct: 3 },
-        { year: "2025", question: "The bad news had an adverse effect on her and she became more down in the dumps as the day passed.", options: ["happy and encouraged", "having a mixed emotion", "sad and discouraged", "gloomy but peaceful", "dejected but energetic"], correct: 2 },
-        { year: "2025", question: "Who wears trousers in your family?", options: ["be financially dependent on the spouse", "be the dominant partner in a marriage", "be a caregiver of the family", "be the most educated family member", "be the only breadwinner of the family"], correct: 1 },
-        { year: "2025", question: "Which item is made from cotton?", options: ["a shirt", "a raincoat", "a wristband", "nylons", "a jumper"], correct: 0 },
-        { year: "2025", question: "A young cow is called a ______.", options: ["cub", "foal", "lamb", "fawn", "calf"], correct: 4 },
-        { year: "2025", question: "A ______ is a part of the building where a vehicle is kept.", options: ["concrete", "patio", "garage", "shade", "garden"], correct: 2 },
-        { year: "2025", question: "Name the means of transport which is controlled by a captain and stops at a port.", options: ["ship", "airplane", "spaceship", "subway", "tram"], correct: 0 },
-        { year: "2025", question: "A ______ uses a computer or smartphone to commit crimes.", options: ["vandal", "fraudster", "cybercriminal", "mugger", "kidnapper"], correct: 2 },
-        { year: "2025", question: "I just can't come out with you tonight as I've got so ______ with my work.", options: ["away", "up", "over", "behind", "along"], correct: 1 },
-        { year: "2025", question: "It was sunny and hot.", options: ["We had a bit of heat wave.", "There were a few sunny showers.", "It was very overcast.", "There was quite a breeze.", "There was a bit of drizzle."], correct: 0 },
-        { year: "2025", question: "I love it here. Everything I want is only five minutes away. It's so ______.", options: ["inconvenient", "efficient", "convenient", "crowded
+        // 12. Түгээмэл тэмдэг нэр (Common Adjectives)
+        { topic: "adjectives", en: "essential", mn: "зайлшгүй чухал", example: "Water is essential for life." },
+        { topic: "adjectives", en: "significant", mn: "чухал, томоохон", example: "There was a significant change in the results." },
+        { topic: "adjectives", en: "obvious", mn: "илэрхий", example: "The answer was obvious to everyone." },
+        { topic: "adjectives", en: "complex", mn: "нарийн төвөгтэй", example: "The problem is more complex than it seems." },
+        { topic: "adjectives", en: "appropriate", mn: "тохиромжтой", example: "Wear appropriate clothes for the interview." },
+        { topic: "adjectives", en: "accurate", mn: "нарийвчлалтай, зөв", example: "Please give an accurate description." },
+        { topic: "adjectives", en: "various", mn: "янз бүрийн", example: "The shop sells various kinds of fruit." },
+        { topic: "adjectives", en: "temporary", mn: "түр зуурын", example: "This is only a temporary solution." },
+        { topic: "adjectives", en: "permanent", mn: "байнгын", example: "He found a permanent job." },
+        { topic: "adjectives", en: "sufficient", mn: "хангалттай", example: "We have sufficient food for the week." },
+        { topic: "adjectives", en: "rare", mn: "ховор", example
